@@ -1,0 +1,26 @@
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:stix="http://stix.mitre.org/">
+
+    <!-- Threat Actor -->
+    <rdf:Description rdf:about="http://example.org/threat_actor/apt28">
+        <rdf:type rdf:resource="http://stix.mitre.org/ThreatActor"/>
+        <rdfs:label>APT28</rdfs:label>
+        <stix:description>APT28, also known as Fancy Bear, is a threat actor group associated with Russian intelligence.</stix:description>
+    </rdf:Description>
+
+    <!-- Indicator -->
+    <rdf:Description rdf:about="http://example.org/indicator/malware">
+        <rdf:type rdf:resource="http://stix.mitre.org/Indicator"/>
+        <rdfs:label>Malware Indicator</rdfs:label>
+        <stix:description>Indicates the presence of malware identified through signature analysis.</stix:description>
+        <stix:pattern>filemd5: 'e99a18c428cb38d5f260853678922e03'</stix:pattern>
+    </rdf:Description>
+
+    <!-- Attack Pattern -->
+    <rdf:Description rdf:about="http://example.org/attack_pattern/phishing">
+        <rdf:type rdf:resource="http://stix.mitre.org/AttackPattern"/>
+        <rdfs:label>Phishing</rdfs:label>
+        <stix:description>Phishing is a social engineering attack used to trick individuals into divulging sensitive information.</stix:description>
+    </rdf:Description>
+</rdf:RDF>
