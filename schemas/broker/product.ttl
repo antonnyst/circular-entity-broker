@@ -1,0 +1,19 @@
+@prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:	<http://www.w3.org/2000/01/rdf-schema#> .
+
+@prefix product: <http://ceb.ltu.se/broker/product> .
+
+product:name a rdfs:Property ;
+	rdfs:isDefinedBy <http://ceb.ltu.se/broker/product> ;
+	rdfs:label "Product Name" ;
+	rdfs:comment "The name of the product." .
+
+product:id a rdfs:Property ;
+	rdfs:isDefinedBy <http://ceb.ltu.se/broker/product> ;
+	rdfs:label "Product Number" ;
+	rdfs:comment "The identifying number/id of the product." .
+
+product:manufacturer a rdfs:Property ;
+	rdfs:isDefinedBy <http://ceb.ltu.se/broker/product> ;
+	rdfs:label "Product Manufacturer" ;
+	rdfs:comment "The company manufacturing the product" .
