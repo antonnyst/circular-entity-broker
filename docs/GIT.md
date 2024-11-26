@@ -3,27 +3,34 @@
 
 + Only allowed to make changes to main via pull request
 
-+ 1 Approval needed
++ 2 Approvals are needed before rebase and merge.
 
-+ commit names? `fix(part): Describe change` or `feat(anotherpart): Describe feature`
++ No commit name scheme but please use proper grammar and imperative mood.
 
-+ commit names? `Issue #: Describe change/fix`
-
-+ or might be too much (or too litte? maybe enforce PR names too!)
-
+    CORRECT:  `Add some diagrams` or `Fix the bug` 
+    
+    WRONG: `Added some stuff` or `Fixed this`
 
 ## Step-by-step guide
 
-1. git pull
+1. Update local repo  
+`git pull`
 
-2. Goto main
+2. Go to the main branch to base your changes upon   
+`git checkout main`
 
-3. checkout new branch
+3. Create new branch name with good name  
+`git checkout -b branch-name`
 
-4. make changes
+4. Make your changes
 
-5. commit changes (multiple times?)
+5. Add and commit your changes  
+`git add .`
+`git commit -m 'Good commit name'`
 
-6. git push with --upstream thing
+6. Push changes to new remote branch  
+`git push --set-remote-upstream origin branch-name`
 
-7. Create pull request on Github (with good description)
+7. Create a pull request on Github (with good description)
+
+8. Hope your changes get approved
