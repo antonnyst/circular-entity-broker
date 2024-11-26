@@ -29,7 +29,7 @@
 `git commit -m 'Good commit name'`
 
 6. Push changes to new remote branch  
-`git push --set-remote-upstream origin branch-name`
+`git push --set-upstream origin branch-name`
 
 7. Create a pull request on Github (with good description)
 
