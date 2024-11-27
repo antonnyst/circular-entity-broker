@@ -19,7 +19,7 @@ for path in pathlist:
     path_in_str = str(path)   
     print(path_in_str)
     g.parse(path_in_str, format="turtle")
-    g.print()
+    
     # print(path_in_str)
 
 @app.route('/')

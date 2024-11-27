@@ -1,21 +1,21 @@
 @prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:	<http://www.w3.org/2000/01/rdf-schema#> .
 
-@base <http://ceb.ltu.se/broker/> .
+@prefix broker: <http://ceb.ltu.se/broker/> .
 
-:product a rdfs:Class .
+broker:product a rdfs:Class .
 
-:product:name a rdf:Property ;
-	rdfs:domain :product ;
+broker:product:name a rdf:Property ;
+	rdfs:domain broker:product ;
 	rdfs:label "Product Name" ;
 	rdfs:comment "The name of the product." .
 
-:product:id a rdf:Property ;
-	rdfs:domain :product ;
+broker:product:id a rdf:Property ;
+	rdfs:domain broker:product ;
 	rdfs:label "Product Number" ;
 	rdfs:comment "The identifying number/id of the product." .
 
-product:manufacturer a rdf:Property ;
-	rdfs:domain :product ;
+broker:product:manufacturer a rdf:Property ;
+	rdfs:domain broker:product ;
 	rdfs:label "Product Manufacturer" ;
 	rdfs:comment "The company manufacturing the product" .
