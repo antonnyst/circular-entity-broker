@@ -6,16 +6,16 @@
 :product a rdfs:Class .
 
 :product:name a rdf:Property ;
-  rdfs:domain :product ;
-  rdfs:label "Product Name" ;
+	rdfs:domain :product ;
+	rdfs:label "Product Name" ;
 	rdfs:comment "The name of the product." .
 
 :product:id a rdf:Property ;
-  rdfs:domain :product ;
+	rdfs:domain :product ;
 	rdfs:label "Product Number" ;
 	rdfs:comment "The identifying number/id of the product." .
 
 product:manufacturer a rdf:Property ;
-  rdfs:domain :product ;
+	rdfs:domain :product ;
 	rdfs:label "Product Manufacturer" ;
 	rdfs:comment "The company manufacturing the product" .
