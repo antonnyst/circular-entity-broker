@@ -4,17 +4,17 @@
 @prefix sawblade: <http://ceb.ltu.se/components/sawblade>^^xsd:anyURI .
 @prefix product: <http://ceb.ltu.se/broker/product>^^xsd:anyURI .
 
-:sawblade a rdfs:Class;
-  rdfs:subClassOf :product .
+sawblade a rdfs:Class;
+	rdfs:subClassOf :product .
 
 sawblade:teethGrade a rdfs:Property ;
-  rdfs:domain :sawblade ;
+	rdfs:domain :sawblade ;
 	rdfs:isDefinedBy <http://ceb.ltu.se/components/sawblade> ;
 	rdfs:label "Teeth Grade" ;
 	rdfs:comment "The fineness/grade of the teeth." .
 
 sawblade:teethAmount a rdfs:Property ;
-  rdfs:domain :sawblade ;
+	rdfs:domain :sawblade ;
 	rdfs:isDefinedBy <http://ceb.ltu.se/components/sawblade> ;
 	rdfs:label "Teeth Amount" ;
 	rdfs:comment "The amount of teeth on the sawblade." .
