@@ -34,3 +34,6 @@
 7. Create a pull request on Github (with good description)
 
 8. Hope your changes get approved
+
+## For kebert
+https://www.youtube.com/watch?v=3FKrszHcIsA
