@@ -1,44 +1,43 @@
 @prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:	<http://www.w3.org/2000/01/rdf-schema#> .
 
-@prefix sawblade: <http://ceb.ltu.se/components/sawblade> .
-@prefix product: <http://ceb.ltu.se/broker/product> .
+@prefix cmp: <http://ceb.ltu.se/components/> .
+@prefix product: <http://ceb.ltu.se/broker/product/> .
+@prefix data: <http://ceb.ltu.se/data/> .
 
-@base <http://ceb.ltu.se/data/> .
-
-:saw01 a sawblade ;
+data:saw01 a cmp:sawblade ;
     product:name "Träsågblad" ;
     product:id "1001" ;
     product:manufacturer "Biltema" ;
-    sawblade:teethGrade "1.5" ;
-    sawblade:teethAmount "65" .
+    cmp:sawblade:teethGrade "1.5" ;
+    cmp:sawblade:teethAmount "65" .
 
-:saw02 a sawblade ;
+data:saw02 a cmp:sawblade ;
     product:name "GrenSågblad" ;
     product:id "1002" ;
     product:manufacturer "Biltema" ;
-    sawblade:teethGrade "0.5" ;
-    sawblade:teethAmount "165" .
+    cmp:sawblade:teethGrade "0.5" ;
+    cmp:sawblade:teethAmount "165" .
 
-:saw03 a sawblade ;
+data:saw03 a cmp:sawblade ;
     product:name "KebertSågblad" ;
     product:id "1003" ;
     product:manufacturer "Datasektionen" ;
-    sawblade:teethGrade "10.5" ;
-    sawblade:teethAmount "1065" .
+    cmp:sawblade:teethGrade "10.5" ;
+    cmp:sawblade:teethAmount "1065" .
 
 
-:saw04 a sawblade ;
+data:saw04 a cmp:sawblade ;
     product:name "MetalSågblad" ;
     product:id "1004" ;
     product:manufacturer "Maskinsektionen" ;
-    sawblade:teethGrade "1.55" ;
-    sawblade:teethAmount "40" .
+    cmp:sawblade:teethGrade "1.55" ;
+    cmp:sawblade:teethAmount "40" .
 
 
-:saw05 a sawblade ;
+data:saw05 a cmp:sawblade ;
     product:name "FönsterSågblad" ;
     product:id "1005" ;
     product:manufacturer "Biltema" ;
-    sawblade:teethGrade "0.1" ;
-    sawblade:teethAmount "1650" .
+    cmp:sawblade:teethGrade "0.1" ;
+    cmp:sawblade:teethAmount "1650" .
