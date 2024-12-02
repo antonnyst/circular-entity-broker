@@ -14,16 +14,18 @@
                 <th>Subject</th>
                 <th>Label</th>
                 <th>Description</th>
+                <th>teethgrade</th>
+                <th>teethamount</th>
             </tr>
         </thead>
         <tbody>
-            {% for row in results %}
                 <tr>
-                    <td>{{ row[0] }}</td>
-                    <td>{{ row[1] }}</td>
-                    <td>{{ row[2] }}</td>
+                    <td>{{ results[0] }}</td>
+                    <td>{{ results[1] }}</td>
+                    <td>{{ results[2] }}</td>
+                    <td>{{ results[3] }}</td>
+                    <td>{{ results[4] }}</td>
                 </tr>
-            {% endfor %}
         </tbody>
     </table>
 {% else %}
