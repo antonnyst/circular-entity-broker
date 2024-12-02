@@ -2,7 +2,6 @@ from flask import Flask, request, render_template
 from rdflib import Graph, Literal, Namespace
 from rdflib.plugins.sparql import prepareQuery
 from pathlib import Path
-import pprint
 
 app = Flask(__name__)
 
@@ -12,24 +11,7 @@ STIX = Namespace("http://stix.mitre.org/")
 EX = Namespace("http://example.org/")
 
 # Load RDF data
-results = []
-pathlist = Path("../rdf").glob('**/*.ttl')
-for path in pathlist:
-    # because path is object not string
-    path_in_str = str(path)
-    g.parse(path_in_str, format="turtle")
-    query = '''
-        SELECT ?name ?id ?manu ?teethGrade ?teethAmount WHERE {
-            ?instance rdf:type cmp:sawblade .
-            ?instance product:name ?name .
-            ?instance product:id ?id .
-            ?instance product:manufacturer ?manu .
-            ?instance cmp:sawblade:teethGrade ?teethGrade .
-            ?instance cmp:sawblade:teethAmount ?teethAmount .
-        }
-    '''
-    result = g.query(query)
-    results.append(result)
+
 
 
 @app.route('/')
@@ -44,6 +26,7 @@ def search():
 
 @app.route('/rdf', methods=['POST'])
 def rdf_query():
+    results = perform_sparql_query()
     Form = request.form['rdf_query']
     desc = []
     for instance in results:
@@ -62,19 +45,26 @@ def rdf_query():
                 desc.append(teethamount)
         return render_template('rdf_results.html', results=desc)
 
-def perform_sparql_query(query):
-    q = prepareQuery(query)
-    formatted_results = []
-
-    # Parse the SPARQL query
-    qres = g.query(q)
-
-    
-    # # Iterate over the results
-    
-        
-    #     formatted_results.append(row)
-    return qres
+def perform_sparql_query():
+    results = []
+    pathlist = Path("../rdf").glob('**/*.ttl')
+    for path in pathlist:
+        # because path is object not string
+        path_in_str = str(path)
+        g.parse(path_in_str, format="turtle")
+        query = '''
+            SELECT ?name ?id ?manu ?teethGrade ?teethAmount WHERE {
+                ?instance rdf:type cmp:sawblade .
+                ?instance product:name ?name .
+                ?instance product:id ?id .
+                ?instance product:manufacturer ?manu .
+                ?instance cmp:sawblade:teethGrade ?teethGrade .
+                ?instance cmp:sawblade:teethAmount ?teethAmount .
+            }
+        '''
+        result = g.query(query)
+        results.append(result)
+    return results
 
 if __name__ == '__main__':
     app.run(debug=True)
