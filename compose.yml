@@ -1,0 +1,5 @@
+services:
+  broker:
+    build: broker/
+    ports:
+      - "7100:5000"
