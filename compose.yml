@@ -3,3 +3,7 @@ services:
     build: broker/
     ports:
       - "7100:5000"
+  database:
+    build: database/
+    ports:
+      - "7200:7200"
