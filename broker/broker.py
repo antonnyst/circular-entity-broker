@@ -2,7 +2,7 @@ from flask import Flask
 from flask import request
 import requests
 
-DB_URI = "http://localhost:7200"
+DB_URI = "http://database:7200"
 REPO_NAME = "ceb"
 
 app = Flask(__name__)
