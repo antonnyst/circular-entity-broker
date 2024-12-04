@@ -4,6 +4,10 @@ services:
     ports:
       - "7100:5000"
   database:
-    build: database/
+    build: 
+      context: .
+      dockerfile: database/Dockerfile
+    volumes:
+      - "/database/datab:/opt/graphdb/home"
     ports:
       - "7200:7200"
