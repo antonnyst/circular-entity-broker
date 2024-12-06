@@ -1,7 +1,0 @@
-[INFO ] 2024-12-06 12:05:01,589 [import-task-ceb-1 | c.o.t.m.MonitorRepositoryConnection] Parallel mode requested but it is disabled globally. Using serial mode instead.
-[INFO ] 2024-12-06 12:05:02,253 [import-task-ceb-1 | c.o.t.m.MonitorRepositoryConnection] Parallel mode requested but it is disabled globally. Using serial mode instead.
-[INFO ] 2024-12-06 12:05:02,770 [import-task-ceb-1 | c.o.t.m.MonitorRepositoryConnection] Parallel mode requested but it is disabled globally. Using serial mode instead.
-[INFO ] 2024-12-06 12:05:03,358 [import-task-ceb-1 | c.o.t.m.MonitorRepositoryConnection] Parallel mode requested but it is disabled globally. Using serial mode instead.
-[INFO ] 2024-12-06 12:05:03,870 [import-task-ceb-1 | c.o.t.m.MonitorRepositoryConnection] Parallel mode requested but it is disabled globally. Using serial mode instead.
-[INFO ] 2024-12-06 12:05:04,388 [import-task-ceb-1 | c.o.t.m.MonitorRepositoryConnection] Parallel mode requested but it is disabled globally. Using serial mode instead.
-[INFO ] 2024-12-06 12:05:04,902 [import-task-ceb-1 | c.o.t.m.MonitorRepositoryConnection] Parallel mode requested but it is disabled globally. Using serial mode instead.
