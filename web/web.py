@@ -10,9 +10,27 @@ g = Graph()
 STIX = Namespace("http://stix.mitre.org/")
 EX = Namespace("http://example.org/")
 
-# Load RDF data
 
-
+pathlist = Path("../rdf").glob('**/*.ttl')
+# Loops through the paths under rdf
+for path in pathlist:
+    results = []
+    # because path is object not string
+    path_in_str = str(path)
+    g.parse(path_in_str, format="turtle")
+    # Query the information from every sawblade
+    query = '''
+        SELECT ?name ?id ?manu ?teethGrade ?teethAmount WHERE {
+            ?instance rdf:type cmp:sawblade .
+            ?instance product:name ?name .
+            ?instance product:id ?id .
+            ?instance product:manufacturer ?manu .
+            ?instance cmp:sawblade:teethGrade ?teethGrade .
+            ?instance cmp:sawblade:teethAmount ?teethAmount .
+        }
+    '''
+    result = g.query(query)
+    results.append(result)
 
 @app.route('/')
 def index():
@@ -20,7 +38,6 @@ def index():
 
 @app.route('/search', methods=['POST'])
 def search():
-    results = perform_sparql_query()
     # Get information from the html form
     Form = request.form['query']
     desc = []
@@ -41,29 +58,5 @@ def search():
                 desc.append(teethgrade)
                 desc.append(teethamount)
         return render_template('search.html', results=desc)
-
-def perform_sparql_query():
-    results = []
-    pathlist = Path("../rdf").glob('**/*.ttl')
-    # Loops through the paths under rdf
-    for path in pathlist:
-        # because path is object not string
-        path_in_str = str(path)
-        g.parse(path_in_str, format="turtle")
-        # Query the information from every sawblade
-        query = '''
-            SELECT ?name ?id ?manu ?teethGrade ?teethAmount WHERE {
-                ?instance rdf:type cmp:sawblade .
-                ?instance product:name ?name .
-                ?instance product:id ?id .
-                ?instance product:manufacturer ?manu .
-                ?instance cmp:sawblade:teethGrade ?teethGrade .
-                ?instance cmp:sawblade:teethAmount ?teethAmount .
-            }
-        '''
-        result = g.query(query)
-        results.append(result)
-    return results
-
 if __name__ == '__main__':
     app.run(debug=True)
