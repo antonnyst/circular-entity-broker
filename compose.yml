@@ -8,6 +8,6 @@ services:
       context: .
       dockerfile: database/Dockerfile
     volumes:
-      - "/database/datab:/opt/graphdb/home"
+      - C:\Users\rasmu\D0020E\circular-entity-broker/graphdb_data:/opt/graphdb/home
     ports:
       - "7200:7200"
