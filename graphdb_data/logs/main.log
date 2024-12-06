@@ -1,0 +1,227 @@
+[INFO ] 2024-12-06 12:04:05,151 [main | c.o.g.Config] Using 'jar:file:/opt/graphdb/dist/lib/graphdb-application-common-10.8.1.jar!/com/ontotext/graphdb/logback.xml' as logback's configuration file
+[INFO ] 2024-12-06 12:04:05,520 [main | c.o.g.s.GraphDB] Starting GraphDB in workbench mode.
+[INFO ] 2024-12-06 12:04:18,089 [main | c.o.g.Config] GraphDB Home directory: /opt/graphdb/home
+[INFO ] 2024-12-06 12:04:18,094 [main | c.o.g.Config] GraphDB Config directory: /opt/graphdb/home/conf
+[INFO ] 2024-12-06 12:04:18,098 [main | c.o.g.Config] GraphDB Data directory: /opt/graphdb/home/data
+[INFO ] 2024-12-06 12:04:18,102 [main | c.o.g.Config] GraphDB Work directory: /opt/graphdb/home/work
+[INFO ] 2024-12-06 12:04:18,105 [main | c.o.g.Config] GraphDB Logs directory: /opt/graphdb/home/logs
+[INFO ] 2024-12-06 12:04:18,816 [main | c.o.f.c.s.r.GraphDBRpcServer] Started gRPC server on port 7300 successfully
+[INFO ] 2024-12-06 12:04:19,707 [main | c.o.l.LicenseRegistry] License configuration: Embedded license
+[INFO ] 2024-12-06 12:04:19,710 [main | c.o.l.LicenseRegistry] License file: jar:file:/opt/graphdb/dist/lib/graphdb-runtime-10.8.1.jar!/GRAPHDB_LITE.license
+[INFO ] 2024-12-06 12:04:19,719 [main | c.o.l.LicenseRegistry] Product:                 GRAPHDB_LITE
+[INFO ] 2024-12-06 12:04:19,720 [main | c.o.l.LicenseRegistry] Capabilities:            [LUCENE_CONNECTOR]
+[INFO ] 2024-12-06 12:04:19,723 [main | c.o.l.LicenseRegistry] Usage restriction:       null
+[INFO ] 2024-12-06 12:04:19,724 [main | c.o.l.LicenseRegistry] Licensee:                Freeware
+[INFO ] 2024-12-06 12:04:19,725 [main | c.o.l.LicenseRegistry] Permitted use:           THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+[INFO ] 2024-12-06 12:04:19,726 [main | c.o.l.LicenseRegistry] Version:                 10.8
+[INFO ] 2024-12-06 12:04:19,728 [main | c.o.l.LicenseRegistry] Expiry date:             none
+[INFO ] 2024-12-06 12:04:19,729 [main | c.o.l.LicenseRegistry] Latest publication date: none
+[INFO ] 2024-12-06 12:04:19,730 [main | c.o.l.LicenseRegistry] Max CPU cores:           1
+[INFO ] 2024-12-06 12:04:23,148 [main | c.o.g.s.GraphDB] Started GraphDB in workbench mode at port 7200.
+[INFO ] 2024-12-06 12:04:54,617 [repository-manager-0 | c.o.t.OwlimSchemaRepository] Version: 10.8, revision: -1162565965
+[INFO ] 2024-12-06 12:04:54,622 [repository-manager-0 | c.o.t.OwlimSchemaRepository] Build date: Fri Nov 29 12:22:17 UTC 2024
+[INFO ] 2024-12-06 12:04:54,637 [repository-manager-0 | c.o.t.OwlimSchemaRepository] Started repository ceb in READ/WRITE mode.
+[INFO ] 2024-12-06 12:04:54,639 [repository-manager-0 | c.o.GraphDBConfigParameters] Cache pages for tuples: 7829
+[INFO ] 2024-12-06 12:04:54,641 [repository-manager-0 | c.o.GraphDBConfigParameters] Cache pages for predicates: 1118
+[INFO ] 2024-12-06 12:04:54,643 [repository-manager-0 | c.o.t.OwlimSchemaRepository] Configured parameter graphdb.engine.onheap.allocation to true
+[INFO ] 2024-12-06 12:04:54,658 [repository-manager-0 | c.o.t.i.FileSystemHealth] Active locations health:
+[INFO ] 2024-12-06 12:04:54,669 [repository-manager-0 | c.o.t.i.FileSystemHealth] /opt/graphdb/home/data/repositories/ceb: 69.0% (OK)
+[INFO ] 2024-12-06 12:04:54,674 [repository-manager-0 | c.o.t.i.FileSystemHealth] /opt/graphdb/home/logs: 69.0% (OK)
+[INFO ] 2024-12-06 12:04:54,680 [repository-manager-0 | c.o.t.i.FileSystemHealth] /opt/graphdb/home/work: 69.0% (OK)
+[INFO ] 2024-12-06 12:04:54,699 [repository-manager-0 | c.o.t.OwlimSchemaRepository] Storage folder does not exist and is created: /opt/graphdb/home/data/repositories/ceb/storage
+[INFO ] 2024-12-06 12:04:54,734 [repository-manager-0 | c.o.t.e.EntityPoolFactory] Using entity pool implementation: transactional-disk
+[INFO ] 2024-12-06 12:04:55,287 [repository-manager-0 | c.o.t.u.l.LimitedObjectCacheFactory] Using LRU cache type: synch
+[WARN ] 2024-12-06 12:04:55,505 [repository-manager-0 | c.o.t.b.AVLRepository] Clear triple statisctics collection
+[WARN ] 2024-12-06 12:04:55,528 [repository-manager-0 | c.o.t.b.AVLRepository] Clear PSOT collection
+[WARN ] 2024-12-06 12:04:55,542 [repository-manager-0 | c.o.t.b.AVLRepository] Clear POST collection
+[WARN ] 2024-12-06 12:04:55,555 [repository-manager-0 | c.o.t.b.AVLRepository] Rebuild triple collections. start entity pool scan...
+[WARN ] 2024-12-06 12:04:55,594 [repository-manager-0 | c.o.t.b.AVLRepository] Entity pool scan completed! Commiting...
+[WARN ] 2024-12-06 12:04:55,870 [repository-manager-0 | c.o.t.b.AVLRepository] Check whether all predicates in the predicate statistics have correct collection sizes.
+[INFO ] 2024-12-06 12:04:55,871 [repository-manager-0 | c.o.t.b.AVLRepository] Checked 0 entries in predicate statistics
+[WARN ] 2024-12-06 12:04:55,873 [repository-manager-0 | c.o.t.b.AVLRepository] Check for missing statement predicates in the predicate statistics
+[INFO ] 2024-12-06 12:04:55,897 [repository-manager-0 | c.o.t.InferencerFactory] ruleSet=rdfsplus-optimized, partialRdfs=false
+[INFO ] 2024-12-06 12:04:56,151 [repository-manager-0 | c.o.t.OwlimSchemaRepository] Searching for plugins available in the classpath...
+[INFO ] 2024-12-06 12:04:56,182 [repository-manager-0 | c.o.GraphDBConfigParameters] Reading external plugins from /opt/graphdb/dist/lib/plugins
+[INFO ] 2024-12-06 12:04:56,184 [repository-manager-0 | c.o.t.OwlimSchemaRepository] Registering external plugins...
+[INFO ] 2024-12-06 12:04:56,610 [repository-manager-0 | c.o.t.p.g.FunctionLoader] Registered 1 functions from package com.ontotext.trree.plugin.geo.
+[INFO ] 2024-12-06 12:04:56,725 [repository-manager-0 | c.o.t.s.i.PluginManager] Initializing plugins: GeoSPARQL, autocomplete, change-tracking, chatgpt-retrieval-connector, dependencies-plugin, direct, elasticsearch-connector, entity-change, expose-entity, geospatial, history, kafka-connector, literals-index, lucene-connector, magic-predicates, mongodb, notifications, notifications-logger, opensearch-connector, plugincontrol, proof, rdfrank, script, sequences, similarity, solr-connector, sparql-mm, sparql-template, text-mining, tx-rollback, utils
+[INFO ] 2024-12-06 12:04:57,704 [repository-manager-0 | c.o.t.g.FunctionLoader] Registered 50 functions from package com.useekm.geosparql.
+[INFO ] 2024-12-06 12:04:57,712 [repository-manager-0 | c.o.t.p.a.AutocompletePluginUtils] >>>>>>>> AutocompletePlugin: No configuration file found at /opt/graphdb/home/data/repositories/ceb/storage/autocomplete/v2/config.properties. Assuming default options for plugin.
+[INFO ] 2024-12-06 12:04:57,855 [repository-manager-0 | c.o.t.p.g.GeoSpatialPlugin] Plugin:geospatial initialized
+[INFO ] 2024-12-06 12:04:57,882 [repository-manager-0 | c.o.t.e.EntityPoolFactory] Using entity pool implementation: transactional-disk
+[INFO ] 2024-12-06 12:04:57,889 [repository-manager-0 | c.o.c.AbstractParameter] Configured parameter 'storage-folder' to value '/opt/graphdb/home/data/repositories/ceb/storage/history/tx-metadata'
+[INFO ] 2024-12-06 12:04:57,895 [repository-manager-0 | c.o.c.AbstractParameter] Configured parameter 'entity-index-size' to value '97.7K'
+[INFO ] 2024-12-06 12:04:58,153 [repository-manager-0 | c.o.p.literals-index] Full-text search functionality is disabled
+[INFO ] 2024-12-06 12:04:58,199 [repository-manager-0 | c.o.p.literals-index] Rebuilding literals indexes. Starting from id: 1
+[INFO ] 2024-12-06 12:04:58,277 [repository-manager-0 | c.o.p.literals-index] Complete in 0.074, num entries indexed:0
+[INFO ] 2024-12-06 12:04:58,310 [repository-manager-0 | c.o.t.p.p.PluginControlPlugin] Plugin:plugincontrol initialized
+[INFO ] 2024-12-06 12:04:58,851 [repository-manager-0 | c.o.g.s.FunctionLoader] Registered 58 functions from package com.github.tkurz.sparqlmm.function.
+[INFO ] 2024-12-06 12:04:59,134 [repository-manager-0 | c.o.t.s.i.PluginManager] Finished initializing plugins
+[INFO ] 2024-12-06 12:04:59,139 [repository-manager-0 | c.o.t.MemoryConfig] Configured global page cache size to 476 MB
+[INFO ] 2024-12-06 12:04:59,142 [repository-manager-0 | c.o.t.MemoryConfig] Max Heap Size: 1 GB
+[INFO ] 2024-12-06 12:04:59,143 [repository-manager-0 | c.o.t.MemoryConfig] Initial Heap Size: 1 GB
+[INFO ] 2024-12-06 12:04:59,510 [repository-manager-0 | c.o.r.p.ParallelLoader] Data will be parsed + resolved + loaded.
+[INFO ] 2024-12-06 12:04:59,529 [repository-manager-0 | c.o.r.p.ParallelLoader] Using 1 threads for inference
+[INFO ] 2024-12-06 12:04:59,955 [repositories/ceb | o.e.r.h.s.r.n.NamespacesController] GET namespace list
+[INFO ] 2024-12-06 12:05:00,081 [repositories/ceb | o.e.r.h.s.r.TupleQueryResultView] Request for query 3392903 is finished
+[INFO ] 2024-12-06 12:05:06,989 [repositories/ceb | o.e.r.h.s.r.n.NamespacesController] GET namespace list
+[INFO ] 2024-12-06 12:05:06,995 [repositories/ceb | o.e.r.h.s.r.TupleQueryResultView] Request for query 3392903 is finished
+[INFO ] 2024-12-06 12:05:09,047 [repositories/ceb | c.o.g.s.h.GraphDBQueryResultHandler] POST query 1294106443
+[INFO ] 2024-12-06 12:05:09,108 [repositories/ceb | c.o.g.s.TupleQueryResultView] Request for query 1294106443 is finished
+[INFO ] 2024-12-06 12:05:27,464 [Thread-5 | c.o.t.OwlimSchemaRepository] Shutdown hook invoked!
+[INFO ] 2024-12-06 12:05:27,586 [Thread-4 | c.o.g.s.GraphDB] Stopping GraphDB.
+[INFO ] 2024-12-06 12:05:27,636 [Thread-4 | c.o.f.c.s.SemanticDataManagement] Shutting down current semantic location
+[WARN ] 2024-12-06 12:05:27,640 [Thread-4 | o.s.c.a.CommonAnnotationBeanPostProcessor] Destroy method on bean with name 'semanticDataManagement' threw an exception: java.lang.IllegalStateException: Shutdown in progress
+[INFO ] 2024-12-06 12:05:37,212 [main | c.o.g.Config] Using 'jar:file:/opt/graphdb/dist/lib/graphdb-application-common-10.8.1.jar!/com/ontotext/graphdb/logback.xml' as logback's configuration file
+[INFO ] 2024-12-06 12:05:37,563 [main | c.o.g.s.GraphDB] Starting GraphDB in workbench mode.
+[INFO ] 2024-12-06 12:05:48,218 [main | c.o.g.Config] GraphDB Home directory: /opt/graphdb/home
+[INFO ] 2024-12-06 12:05:48,223 [main | c.o.g.Config] GraphDB Config directory: /opt/graphdb/home/conf
+[INFO ] 2024-12-06 12:05:48,228 [main | c.o.g.Config] GraphDB Data directory: /opt/graphdb/home/data
+[INFO ] 2024-12-06 12:05:48,232 [main | c.o.g.Config] GraphDB Work directory: /opt/graphdb/home/work
+[INFO ] 2024-12-06 12:05:48,234 [main | c.o.g.Config] GraphDB Logs directory: /opt/graphdb/home/logs
+[INFO ] 2024-12-06 12:05:48,910 [main | c.o.f.c.s.r.GraphDBRpcServer] Started gRPC server on port 7300 successfully
+[INFO ] 2024-12-06 12:05:49,729 [main | c.o.l.LicenseRegistry] License configuration: Embedded license
+[INFO ] 2024-12-06 12:05:49,732 [main | c.o.l.LicenseRegistry] License file: jar:file:/opt/graphdb/dist/lib/graphdb-runtime-10.8.1.jar!/GRAPHDB_LITE.license
+[INFO ] 2024-12-06 12:05:49,742 [main | c.o.l.LicenseRegistry] Product:                 GRAPHDB_LITE
+[INFO ] 2024-12-06 12:05:49,743 [main | c.o.l.LicenseRegistry] Capabilities:            [LUCENE_CONNECTOR]
+[INFO ] 2024-12-06 12:05:49,746 [main | c.o.l.LicenseRegistry] Usage restriction:       null
+[INFO ] 2024-12-06 12:05:49,747 [main | c.o.l.LicenseRegistry] Licensee:                Freeware
+[INFO ] 2024-12-06 12:05:49,749 [main | c.o.l.LicenseRegistry] Permitted use:           THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+[INFO ] 2024-12-06 12:05:49,749 [main | c.o.l.LicenseRegistry] Version:                 10.8
+[INFO ] 2024-12-06 12:05:49,751 [main | c.o.l.LicenseRegistry] Expiry date:             none
+[INFO ] 2024-12-06 12:05:49,752 [main | c.o.l.LicenseRegistry] Latest publication date: none
+[INFO ] 2024-12-06 12:05:49,753 [main | c.o.l.LicenseRegistry] Max CPU cores:           1
+[INFO ] 2024-12-06 12:05:53,419 [main | c.o.g.s.GraphDB] Started GraphDB in workbench mode at port 7200.
+[INFO ] 2024-12-06 12:05:55,102 [repository-manager-0 | c.o.t.OwlimSchemaRepository] Version: 10.8, revision: -1162565965
+[INFO ] 2024-12-06 12:05:55,106 [repository-manager-0 | c.o.t.OwlimSchemaRepository] Build date: Fri Nov 29 12:22:17 UTC 2024
+[INFO ] 2024-12-06 12:05:55,122 [repository-manager-0 | c.o.t.OwlimSchemaRepository] Started repository ceb in READ/WRITE mode.
+[INFO ] 2024-12-06 12:05:55,123 [repository-manager-0 | c.o.GraphDBConfigParameters] Cache pages for tuples: 7829
+[INFO ] 2024-12-06 12:05:55,125 [repository-manager-0 | c.o.GraphDBConfigParameters] Cache pages for predicates: 1118
+[INFO ] 2024-12-06 12:05:55,127 [repository-manager-0 | c.o.t.OwlimSchemaRepository] Configured parameter graphdb.engine.onheap.allocation to true
+[INFO ] 2024-12-06 12:05:55,146 [repository-manager-0 | c.o.t.i.FileSystemHealth] Active locations health:
+[INFO ] 2024-12-06 12:05:55,158 [repository-manager-0 | c.o.t.i.FileSystemHealth] /opt/graphdb/home/data/repositories/ceb: 69.0% (OK)
+[INFO ] 2024-12-06 12:05:55,161 [repository-manager-0 | c.o.t.i.FileSystemHealth] /opt/graphdb/home/logs: 69.0% (OK)
+[INFO ] 2024-12-06 12:05:55,171 [repository-manager-0 | c.o.t.i.FileSystemHealth] /opt/graphdb/home/work: 69.0% (OK)
+[INFO ] 2024-12-06 12:05:55,262 [repository-manager-0 | c.o.t.e.EntityPoolFactory] Using entity pool implementation: transactional-disk
+[INFO ] 2024-12-06 12:05:55,404 [repository-manager-0 | c.o.t.e.i.m.PersistedHashMap] Restoring entity hash table...
+[INFO ] 2024-12-06 12:05:55,815 [repository-manager-0 | c.o.t.e.i.m.PersistedHashMap] Restored 118 entities allocating 12.0 MB
+[INFO ] 2024-12-06 12:05:55,824 [repository-manager-0 | c.o.t.e.i.m.PersistedHashMap] Done in 409 ms.
+[INFO ] 2024-12-06 12:05:55,932 [repository-manager-0 | c.o.t.u.l.LimitedObjectCacheFactory] Using LRU cache type: synch
+[WARN ] 2024-12-06 12:05:56,287 [repository-manager-0 | c.o.t.b.AVLRepository] Check whether all predicates in the predicate statistics have correct collection sizes.
+[INFO ] 2024-12-06 12:05:56,303 [repository-manager-0 | c.o.t.b.AVLRepository] Checked 16 entries in predicate statistics
+[WARN ] 2024-12-06 12:05:56,304 [repository-manager-0 | c.o.t.b.AVLRepository] Check for missing statement predicates in the predicate statistics
+[WARN ] 2024-12-06 12:05:56,316 [repository-manager-0 | c.o.t.OwlimSchemaRepository] Rule list configuration present, it will override all other rule sets parameters!
+[INFO ] 2024-12-06 12:05:56,392 [repository-manager-0 | c.o.t.InferencerFactory] ruleSet=rdfsplus-optimized, partialRdfs=false
+[INFO ] 2024-12-06 12:05:56,556 [repository-manager-0 | c.o.t.OwlimSchemaRepository] Searching for plugins available in the classpath...
+[INFO ] 2024-12-06 12:05:56,585 [repository-manager-0 | c.o.GraphDBConfigParameters] Reading external plugins from /opt/graphdb/dist/lib/plugins
+[INFO ] 2024-12-06 12:05:56,587 [repository-manager-0 | c.o.t.OwlimSchemaRepository] Registering external plugins...
+[INFO ] 2024-12-06 12:05:56,864 [repository-manager-0 | c.o.t.p.g.FunctionLoader] Registered 1 functions from package com.ontotext.trree.plugin.geo.
+[INFO ] 2024-12-06 12:05:56,947 [repository-manager-0 | c.o.t.s.i.PluginManager] Initializing plugins: GeoSPARQL, autocomplete, change-tracking, chatgpt-retrieval-connector, dependencies-plugin, direct, elasticsearch-connector, entity-change, expose-entity, geospatial, history, kafka-connector, literals-index, lucene-connector, magic-predicates, mongodb, notifications, notifications-logger, opensearch-connector, plugincontrol, proof, rdfrank, script, sequences, similarity, solr-connector, sparql-mm, sparql-template, text-mining, tx-rollback, utils
+[INFO ] 2024-12-06 12:05:58,225 [repository-manager-0 | c.o.t.g.FunctionLoader] Registered 50 functions from package com.useekm.geosparql.
+[INFO ] 2024-12-06 12:05:58,236 [repository-manager-0 | c.o.t.p.a.AutocompletePluginUtils] >>>>>>>> AutocompletePlugin: No configuration file found at /opt/graphdb/home/data/repositories/ceb/storage/autocomplete/v2/config.properties. Assuming default options for plugin.
+[INFO ] 2024-12-06 12:05:58,326 [repository-manager-0 | c.o.t.p.g.GeoSpatialPlugin] Plugin:geospatial initialized
+[INFO ] 2024-12-06 12:05:58,359 [repository-manager-0 | c.o.t.e.EntityPoolFactory] Using entity pool implementation: transactional-disk
+[INFO ] 2024-12-06 12:05:58,367 [repository-manager-0 | c.o.c.AbstractParameter] Configured parameter 'storage-folder' to value '/opt/graphdb/home/data/repositories/ceb/storage/history/tx-metadata'
+[INFO ] 2024-12-06 12:05:58,374 [repository-manager-0 | c.o.c.AbstractParameter] Configured parameter 'entity-index-size' to value '97.7K'
+[INFO ] 2024-12-06 12:05:58,389 [repository-manager-0 | c.o.t.e.i.m.PersistedHashMap] Restoring entity hash table...
+[INFO ] 2024-12-06 12:05:58,495 [repository-manager-0 | c.o.t.e.i.m.PersistedHashMap] Restored 2 entities allocating 12.0 MB
+[INFO ] 2024-12-06 12:05:58,496 [repository-manager-0 | c.o.t.e.i.m.PersistedHashMap] Done in 104 ms.
+[INFO ] 2024-12-06 12:05:58,595 [repository-manager-0 | c.o.p.literals-index] Full-text search functionality is disabled
+[INFO ] 2024-12-06 12:05:58,635 [repository-manager-0 | c.o.p.literals-index] Literals indices restored.
+[INFO ] 2024-12-06 12:05:58,661 [repository-manager-0 | c.o.t.p.p.PluginControlPlugin] Plugin:plugincontrol initialized
+[INFO ] 2024-12-06 12:05:59,182 [Thread-4 | c.o.g.s.GraphDB] Stopping GraphDB.
+[INFO ] 2024-12-06 12:05:59,304 [repository-manager-0 | c.o.g.s.FunctionLoader] Registered 58 functions from package com.github.tkurz.sparqlmm.function.
+[INFO ] 2024-12-06 12:05:59,599 [repository-manager-0 | c.o.t.s.i.PluginManager] Finished initializing plugins
+[INFO ] 2024-12-06 12:05:59,666 [repository-manager-0 | c.o.t.b.AVLRepository] NumberOfStatements = 152
+[INFO ] 2024-12-06 12:05:59,668 [repository-manager-0 | c.o.t.b.AVLRepository] NumberOfExplicitStatements = 55
+[ERROR] 2024-12-06 12:05:59,704 [repositories/ceb | c.o.f.s.GraphDBProtocolExceptionResolver] Error while handling request (500)
+org.eclipse.rdf4j.http.server.ServerHTTPException: org.eclipse.rdf4j.repository.RepositoryException: java.lang.IllegalStateException: Shutdown in progress
+	at org.eclipse.rdf4j.http.server.repository.RepositoryInterceptor.setRequestAttributes(RepositoryInterceptor.java:116)
+	at org.eclipse.rdf4j.http.server.ServerInterceptor.preHandle(ServerInterceptor.java:35)
+	at org.eclipse.rdf4j.http.server.repository.RepositoryInterceptor.preHandle(RepositoryInterceptor.java:85)
+	at com.ontotext.forest.sesame.ForestRepositoryInterceptor.preHandle(ForestRepositoryInterceptor.java:34)
+	at com.ontotext.forest.sesame.ForestRepositoryInterceptor$$FastClassBySpringCGLIB$$d99bcd9f.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:792)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.support.DelegatingIntroductionInterceptor.doProceed(DelegatingIntroductionInterceptor.java:137)
+	at org.springframework.aop.support.DelegatingIntroductionInterceptor.invoke(DelegatingIntroductionInterceptor.java:124)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:707)
+	at com.ontotext.forest.sesame.ForestRepositoryInterceptor$$EnhancerBySpringCGLIB$$1c036c7f.preHandle(<generated>)
+	at org.springframework.web.servlet.HandlerExecutionChain.applyPreHandle(HandlerExecutionChain.java:148)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1067)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:965)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:898)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:529)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:199)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:144)
+	at com.ontotext.forest.security.AdminDelegatingFilterProxy.doFilter(AdminDelegatingFilterProxy.java:85)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:354)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:267)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:168)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:144)
+	at com.ontotext.forest.clusterproxy.ClusterFilterBean.doFilter(ClusterFilterBean.java:73)
+	at com.ontotext.forest.clusterproxy.ClusterLoadBalancerFilter.doFilterInternal(ClusterLoadBalancerFilter.java:25)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:168)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:144)
+	at com.ontotext.forest.core.request.RequestFilter.doFilterInternal(RequestFilter.java:47)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:168)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:144)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:168)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:144)
+	at com.github.ziplet.filter.compression.CompressingFilter.doFilter(CompressingFilter.java:263)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:168)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:144)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:168)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:481)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:130)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:346)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:388)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:936)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1791)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.eclipse.rdf4j.repository.RepositoryException: java.lang.IllegalStateException: Shutdown in progress
+	at org.eclipse.rdf4j.repository.sail.SailRepository.initializeInternal(SailRepository.java:165)
+	at org.eclipse.rdf4j.repository.base.AbstractRepository.init(AbstractRepository.java:36)
+	at org.eclipse.rdf4j.repository.manager.LocalRepositoryManager.createRepository(LocalRepositoryManager.java:212)
+	at com.ontotext.graphdb.GraphDBRepositoryManager.createRepository(GraphDBRepositoryManager.java:394)
+	at com.ontotext.graphdb.GraphDBRepositoryManager$FutureRepository.lambda$new$0(GraphDBRepositoryManager.java:106)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at common.GraphDBMDCExecutorBuilder.lambda$wrap$1(GraphDBMDCExecutorBuilder.java:95)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	... 1 common frames omitted
+Caused by: org.eclipse.rdf4j.sail.SailException: java.lang.IllegalStateException: Shutdown in progress
+	at com.ontotext.trree.OwlimSchemaRepository.initializeInternalNoCleanup(OwlimSchemaRepository.java:394)
+	at com.ontotext.trree.io.FileSystemHealth.executeWithReducedThreshold(FileSystemHealth.java:353)
+	at com.ontotext.trree.OwlimSchemaRepository.initializeInternal(OwlimSchemaRepository.java:183)
+	at org.eclipse.rdf4j.sail.helpers.AbstractSail.init(AbstractSail.java:183)
+	at org.eclipse.rdf4j.repository.sail.SailRepository.initializeInternal(SailRepository.java:158)
+	... 11 common frames omitted
+Caused by: java.lang.IllegalStateException: Shutdown in progress
+	at java.base/java.lang.ApplicationShutdownHooks.add(ApplicationShutdownHooks.java:66)
+	at java.base/java.lang.Runtime.addShutdownHook(Runtime.java:216)
+	at com.ontotext.trree.OwlimSchemaRepository.addShutdownHook(OwlimSchemaRepository.java:1876)
+	at com.ontotext.trree.OwlimSchemaRepository.initializeInternalNoCleanup(OwlimSchemaRepository.java:325)
+	... 15 common frames omitted
+[INFO ] 2024-12-06 12:05:59,825 [Thread-4 | c.o.f.c.s.SemanticDataManagement] Shutting down current semantic location
