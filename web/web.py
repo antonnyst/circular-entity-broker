@@ -21,12 +21,16 @@ def index():
 @app.route('/search', methods=['POST'])
 def search():
     results = perform_sparql_query()
+    # Get information from the html form
     Form = request.form['query']
     desc = []
+    # Loops through the path and then every sawblade in path
     for instance in results:
         for inst in instance:
             name = str(inst['name'])
+            # Checks if input from form equals name from every sawblade
             if Form.__eq__(name):
+                # Add product information when product name exists
                 id = str(inst['id'])
                 manu = str(inst['manu'])
                 teethgrade = str(inst['teethGrade'])
@@ -41,10 +45,12 @@ def search():
 def perform_sparql_query():
     results = []
     pathlist = Path("../rdf").glob('**/*.ttl')
+    # Loops through the paths under rdf
     for path in pathlist:
         # because path is object not string
         path_in_str = str(path)
         g.parse(path_in_str, format="turtle")
+        # Query the information from every sawblade
         query = '''
             SELECT ?name ?id ?manu ?teethGrade ?teethAmount WHERE {
                 ?instance rdf:type cmp:sawblade .
