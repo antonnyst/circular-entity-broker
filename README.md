@@ -1,7 +1,7 @@
 # circular-entity-broker
 
 ## Architecture
-
+GraphDB
 ### Services
 
 ### UI
