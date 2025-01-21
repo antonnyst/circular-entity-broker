@@ -1,0 +1,192 @@
+openapi: '3.0.3'
+info:
+  title: Broker API
+  description: API Spec for the Circular Entity Broker.
+  version: 0.1.0
+servers:
+  - url: https://api.ceb.ltu.se/v1
+  - url: https://api.ceb.rekursion.se/v1
+
+components:
+  schemas:
+    Property:
+      type: object
+      properties:
+        valueType:
+          type: string
+          description: Which type the value has, if `float` the broker will try to convert and throw an error if the value cannot be parset to a float.
+          enum:
+            - string
+            - float
+          example: "float"
+        property:
+          description: The property
+          type: string
+          example: "teethGrade"
+        value:
+          description: The value
+          type: string
+          example: "2.3"
+
+    PropertyQuery:
+      type: object
+      properties:
+        queryType:
+          type: string
+          description: How to compare this property when performing the query
+          enum:
+            - min
+            - max
+            - exact
+          example: "exact"
+        valueType:
+          type: string
+          description: Which type the value has, if `float` the broker will try to convert and throw an error if the value cannot be parset to a float.
+          enum:
+            - string
+            - float
+          example: "float"
+        property:
+          description: The property to search
+          type: string
+          example: "teethGrade"
+        value:
+          description: The value to compare to
+          type: string
+          example: "2.3"
+
+    Query:
+      type: object
+      required:
+        - query
+      properties:
+        limit:
+          type: integer
+          example: 100
+        offset:
+          type: integer
+          example: 0
+        query:
+          type: array
+          items:
+            $ref: "#/components/schemas/PropertyQuery"
+
+    ModifyProduct:
+      type: object
+      properties:
+        properties:
+          type: array
+          items:
+            $ref: "#/components/schemas/Property"
+
+
+    Product:
+      type: object
+      properties:
+        productId:
+          type: string
+          example: "abc123"
+        properties:
+          type: array
+          items:
+            $ref: "#/components/schemas/Property"
+
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: "Error parsing value"
+
+  responses:
+      Unauthorized:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Error"
+      Error:
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Error"
+
+paths:
+  /query:
+    post:
+      requestBody:
+        content: 
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Query"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/Error"
+  /product:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ModifyProduct"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/Error"
+    put:
+      parameters:
+        - name: productId
+          in: query
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ModifyProduct"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/Error"
+    delete:
+      parameters:
+        - name: productId
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/Error"
