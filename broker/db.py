@@ -4,7 +4,9 @@ import json
 DB_URI = "http://database:7200"
 REPO_NAME = "ceb"
 
-PRODUCT_PREFIX = "http://ceb.ltu.se/components/"
+BROKER_PREFIX = "http://ceb.ltu.se/broker/"
+COMPONENT_PREFIX = "http://ceb.ltu.se/components/"
+DATA_PREFIX = "http://ceb.ltu.se/data/"
 
 def send_sparql_query(sparql_query):
     
@@ -15,17 +17,51 @@ def send_sparql_query(sparql_query):
     # Return
     return response
 
-# Retrieves an products properties
-def get_properties(product_name):
+# add_product
+# product_id : string
+# product_name: string
+# properties : [(property,value)]
+#
+def add_product(product_id, product_name, properties): 
+    property_string = ""
+    
     query = """ 
-        PREFIX cmp: <{PRODUCT_PREFIX}>
+        PREFIX cmp: <{COMPONENT_PREFIX}>
+        PREFIX data: <{DATA_PREFIX}>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        INSERT DATA {{
+            data:{product_id} a cmp:{product} ;
+                product:name "Träsågblad" ;
+                product:id "1001" ;
+                product:manufacturer "Biltema" ;
+                cmp:sawblade:teethGrade "1.5" ;
+                cmp:sawblade:teethAmount "65" .
+        }}
+    """.format(product = product_name, COMPONENT_PREFIX=COMPONENT_PREFIX, DATA_PREFIX=DATA_PREFIX)
+    return
+
+def modify_product():
+    # TODO
+    return
+
+def delete_product():
+    # TODO
+    return
+
+# Retrieves an products properties based upon its full uri
+def get_properties(product_uri, strip_prefix=False):
+    #print(product_uri)
+    query = """ 
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         select ?property where {{
-            ?property rdf:type rdfs:Property ;
-                    rdfs:domain cmp:{product} .
+            ?property rdf:type rdf:Property ;
+                    rdfs:domain <{product}> .
         }}
-    """.format(product = product_name, PRODUCT_PREFIX=PRODUCT_PREFIX)
+    """.format(product = product_uri)
+
+    #print(query)
 
     response = send_sparql_query(query)
 
@@ -33,9 +69,51 @@ def get_properties(product_name):
     properties = list(map(lambda x: x[0], sparql_parse(response.text)))
     
     # Remove the product prefix
-    properties = list(map(lambda x: x.removeprefix(PRODUCT_PREFIX+product_name+":"), properties))
+    if strip_prefix:
+        properties = list(map(lambda x: x.split(":")[-1], properties))
     
     return properties
+
+# get_parent_products
+# product_uri : full uri string
+# returns full uri
+def get_parent_products(product_uri):
+    query = """
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        select ?parent where {{
+            <{product}> rdfs:subClassOf ?parent .
+            
+            FILTER(<{product}> != ?parent)
+        }}
+    """.format(product = product_uri)
+    #print(query)
+    response = send_sparql_query(query)
+
+    parents = list(map(lambda x: x[0], sparql_parse(response.text)))
+
+    return parents
+
+# get_full_property_uri
+# Based upon an product_name (assumed to be in cmp prefix) and an property name finds 
+# the namespace the property is in, looking from the specified product and its parents
+# product_name : string
+# property : string
+# returns string or None if not found
+def get_full_property_uri(product_name, prop, prefix=COMPONENT_PREFIX):
+    # First check properties of specified products
+    properties = get_properties(prefix + product_name, strip_prefix=True)
+    if prop in properties:
+        # We found the property full uri should be
+        return prefix + product_name + ":" + prop
+
+    # Then check properties of parent products
+    parents = get_parent_products(prefix + product_name)
+    for parent in parents:
+        properties = get_properties(parent, strip_prefix=True)
+        if prop in properties:
+            return parent + ":" + prop
+
+    return None
 
 # Parses sparql responses into python list of lists
 def sparql_parse(raw_json):
@@ -56,4 +134,4 @@ def sparql_parse(raw_json):
 
 # Run som tests if this module was ran independently
 if __name__ == "__main__":
-    print(get_properties("sawblade"))
+    print(get_full_property_uri("sawblade","manufacturer"))
