@@ -9,37 +9,58 @@ COMPONENT_PREFIX = "http://ceb.ltu.se/components/"
 DATA_PREFIX = "http://ceb.ltu.se/data/"
 
 def send_sparql_query(sparql_query):
-    
     headers = {'Accept': 'application/json', "content-type": "application/x-www-form-urlencoded"}
-    
     response = requests.post(DB_URI+"/repositories/"+REPO_NAME, data={'query': sparql_query}, headers=headers)
-    
-    # Return
+    return response
+
+def send_sparql_update(sparql_update):
+    headers = {'Accept': 'application/json', "content-type": "application/x-www-form-urlencoded"}    
+    response = requests.post(DB_URI+"/repositories/"+REPO_NAME+"/statements", data={'update': sparql_update}, headers=headers)
     return response
 
 # add_product
 # product_id : string
 # product_name: string
-# properties : [(property,value)]
-#
+# properties : [(property,value),(property2, value2)]
+# property assumed just name with no prefix
+# product_name assumed to be in cmp prefix
 def add_product(product_id, product_name, properties): 
     property_string = ""
     
-    query = """ 
+    for i in range(0,len(properties)):
+        prop = properties[i]
+        prop_name = get_full_property_uri(product_name, prop[0])
+        prop_value = prop[1]
+        property_string += " <{}> \"{}\" ".format(prop_name, prop_value)
+        if i < len(properties)-1:
+            property_string += ";"
+        else:
+            property_string += "."
+    
+    
+    query = """
         PREFIX cmp: <{COMPONENT_PREFIX}>
         PREFIX data: <{DATA_PREFIX}>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         INSERT DATA {{
             data:{product_id} a cmp:{product} ;
-                product:name "Träsågblad" ;
-                product:id "1001" ;
-                product:manufacturer "Biltema" ;
-                cmp:sawblade:teethGrade "1.5" ;
-                cmp:sawblade:teethAmount "65" .
+            {property_string}
         }}
-    """.format(product = product_name, COMPONENT_PREFIX=COMPONENT_PREFIX, DATA_PREFIX=DATA_PREFIX)
-    return
+    """.format(
+        product = product_name,
+        product_id=product_id,
+        property_string=property_string,
+        COMPONENT_PREFIX=COMPONENT_PREFIX,
+        DATA_PREFIX=DATA_PREFIX
+    )
+
+    response = send_sparql_update(query)
+
+    if not response.ok:
+        print("Error in add_product")
+
+    return response
 
 def modify_product():
     # TODO
@@ -134,4 +155,13 @@ def sparql_parse(raw_json):
 
 # Run som tests if this module was ran independently
 if __name__ == "__main__":
-    print(get_full_property_uri("sawblade","manufacturer"))
+    #print(get_full_property_uri("sawblade","manufacturer"))
+
+    #add_product("f1a2","sawblade",[
+    #    ("name","DetUltimataSågbladet"),
+    #    ("manufacturer","Weyland-Yutani"),
+    #    ("teethGrade", "200"),
+    #    ("teethAmount", "20")
+    #    ]
+    #)
+    print("")
