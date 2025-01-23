@@ -1,9 +1,7 @@
 from flask import Flask
 from flask import request
 import requests
-
-DB_URI = "http://database:7200"
-REPO_NAME = "ceb"
+import db
 
 app = Flask(__name__)
 
