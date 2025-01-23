@@ -7,16 +7,23 @@ app = Flask(__name__)
 
 @app.route("/")
 def main():
-    return "Endpoints: /register /unregister /abandon /query"
+    return "Endpoints: /product /abandon /query"
 
-@app.post("/unregister")
-def unregister():
+# Create new product
+@app.post("/product")
+def product_post():
     # TODO
     return "OK"
 
-@app.post("/register")
-def register():
-    # Maybe file upload
+# Modify product
+@app.put("/product")
+def product_put():
+    # TODO
+    return "OK"
+
+# Remove product
+@app.delete("/product")
+def product_delete():
     # TODO
     return "OK"
 
