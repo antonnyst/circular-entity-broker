@@ -28,6 +28,7 @@ def add_product(product_id, product_name, properties):
     property_string = ""
     
     for i in range(0,len(properties)):
+        print(properties[i])
         prop = properties[i]
         prop_name = get_full_property_uri(product_name, prop[0])
         prop_value = prop[1]
@@ -54,7 +55,7 @@ def add_product(product_id, product_name, properties):
         COMPONENT_PREFIX=COMPONENT_PREFIX,
         DATA_PREFIX=DATA_PREFIX
     )
-
+    
     response = send_sparql_update(query)
 
     if not response.ok:
@@ -157,11 +158,12 @@ def sparql_parse(raw_json):
 if __name__ == "__main__":
     #print(get_full_property_uri("sawblade","manufacturer"))
 
-    #add_product("f1a2","sawblade",[
-    #    ("name","DetUltimataSågbladet"),
-    #    ("manufacturer","Weyland-Yutani"),
-    #    ("teethGrade", "200"),
-    #    ("teethAmount", "20")
-    #    ]
-    #)
+    add_product("f1a2","sawblade",
+        [
+            ("name","DetUltimataSågbladet"),
+            ("manufacturer","Weyland-Yutani"),
+            ("teethGrade", "200"),
+            ("teethAmount", "20")
+        ]
+    )
     print("")
