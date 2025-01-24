@@ -20,9 +20,7 @@ def generate_productId():
 # since rdf schema does not define types for the parameters'
 # https://www.w3.org/TR/2013/REC-sparql11-update-20130321/
 @app.post("/product")
-def product_post():
-    print(request.json)
-    
+def product_post():    
     product_name = "sawblade" # Assuming sawblade until API supports specifying product name
     
     # Convert to (uri, value)
@@ -54,7 +52,6 @@ def product_post():
     # Generate productId
     productId = generate_productId()
 
-
     # Send query to db
     result = db.add_product(productId, product_name, properties)
     
@@ -63,7 +60,6 @@ def product_post():
             "code": 500,
             "message": "Error adding product"
         }
-
 
     # Return OK with productID and properties.
     return {
