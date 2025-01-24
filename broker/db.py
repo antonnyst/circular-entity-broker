@@ -85,6 +85,7 @@ def get_properties(product_uri, strip_prefix=False):
 
     #print(query)
 
+
     response = send_sparql_query(query)
 
     # Convert list of lists to just a list
