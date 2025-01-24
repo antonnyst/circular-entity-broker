@@ -2,42 +2,42 @@
 @prefix rdfs:	<http://www.w3.org/2000/01/rdf-schema#> .
 
 @prefix cmp: <http://ceb.ltu.se/components/> .
-@prefix product: <http://ceb.ltu.se/broker/product/> .
+@prefix broker: <http://ceb.ltu.se/broker/> .
 @prefix data: <http://ceb.ltu.se/data/> .
 
 data:saw01 a cmp:sawblade ;
-    product:name "Träsågblad" ;
-    product:id "1001" ;
-    product:manufacturer "Biltema" ;
+    broker:product:name "Träsågblad" ;
+    broker:product:id "1001" ;
+    broker:product:manufacturer "Biltema" ;
     cmp:sawblade:teethGrade "1.5" ;
     cmp:sawblade:teethAmount "65" .
 
 data:saw02 a cmp:sawblade ;
-    product:name "GrenSågblad" ;
-    product:id "1002" ;
-    product:manufacturer "Biltema" ;
+    broker:product:name "GrenSågblad" ;
+    broker:product:id "1002" ;
+    broker:product:manufacturer "Biltema" ;
     cmp:sawblade:teethGrade "0.5" ;
     cmp:sawblade:teethAmount "165" .
 
 data:saw03 a cmp:sawblade ;
-    product:name "KebertSågblad" ;
-    product:id "1003" ;
-    product:manufacturer "Datasektionen" ;
+    broker:product:name "KebertSågblad" ;
+    broker:product:id "1003" ;
+    broker:product:manufacturer "Datasektionen" ;
     cmp:sawblade:teethGrade "10.5" ;
     cmp:sawblade:teethAmount "1065" .
 
 
 data:saw04 a cmp:sawblade ;
-    product:name "MetalSågblad" ;
-    product:id "1004" ;
-    product:manufacturer "Maskinsektionen" ;
+    broker:product:name "MetalSågblad" ;
+    broker:product:id "1004" ;
+    broker:product:manufacturer "Maskinsektionen" ;
     cmp:sawblade:teethGrade "1.55" ;
     cmp:sawblade:teethAmount "40" .
 
 
 data:saw05 a cmp:sawblade ;
-    product:name "FönsterSågblad" ;
-    product:id "1005" ;
-    product:manufacturer "Biltema" ;
+    broker:product:name "FönsterSågblad" ;
+    broker:product:id "1005" ;
+    broker:product:manufacturer "Biltema" ;
     cmp:sawblade:teethGrade "0.1" ;
     cmp:sawblade:teethAmount "1650" .
