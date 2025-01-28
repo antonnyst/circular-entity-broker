@@ -2,15 +2,15 @@
 <html>
 <head>
     <title>Search for you product</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='base.css') }}">
+    <script src="{{ url_for('static', filename='search.js') }}"></script>
 </head>
-<body>
-    <h1>Search for it</h1>
-    <form action="/search" method="post">
-        <label for="query">Which product:</label>
-        <input type="text" id="query" name="query" placeholder="Search for threat actors, indicators, etc.">
+<body onload="initiate({{properties}})">
+    <div class="showproperties" id="showall">
+        <class="showproperties" id="showprops">
+            
 
-        <button type="submit">Search</button>
-    </form>
+        </div>   
+    </div>
 </body>
 </html>

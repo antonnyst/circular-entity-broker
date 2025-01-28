@@ -1,62 +1,24 @@
+import json
 from flask import Flask, request, render_template
-from rdflib import Graph, Literal, Namespace
-from rdflib.plugins.sparql import prepareQuery
-from pathlib import Path
-
 app = Flask(__name__)
 
-# Initialize RDFLib graph and namespaces
-g = Graph()
-STIX = Namespace("http://stix.mitre.org/")
-EX = Namespace("http://example.org/")
-
-
-pathlist = Path("../rdf").glob('**/*.ttl')
-# Loops through the paths under rdf
-for path in pathlist:
-    results = []
-    # because path is object not string
-    path_in_str = str(path)
-    g.parse(path_in_str, format="turtle")
-    # Query the information from every sawblade
-    query = '''
-        SELECT ?name ?id ?manu ?teethGrade ?teethAmount WHERE {
-            ?instance rdf:type cmp:sawblade .
-            ?instance product:name ?name .
-            ?instance product:id ?id .
-            ?instance product:manufacturer ?manu .
-            ?instance cmp:sawblade:teethGrade ?teethGrade .
-            ?instance cmp:sawblade:teethAmount ?teethAmount .
-        }
-    '''
-    result = g.query(query)
-    results.append(result)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
-
+    # For An array of JSON for testing
+    properties = []
+    properties.append(json.dumps({"product" : "Sawblade", "id" : "1", "manufacturer": "Biltema", "teethGrade":"1.5", "teethamount":"65"}))
+    properties.append(json.dumps({"product" : "Cars", "id" : "2", "manufacturer": "Toyota", "plåtkvalite":"5", "Hjul":"4"}))
+    properties.append(json.dumps({"product" : "Sawblade", "id" : "3", "manufacturer": "Kebert", "teethGrade":"7", "teethamount":"90"}))
+    return render_template('index.html', properties=properties)
 @app.route('/search', methods=['POST'])
+
+#This will not be fixed but one website each company who have the specification
+@app.route('/Biltema')
+def manufacturer():
+    return "It works"
+
 def search():
-    # Get information from the html form
-    Form = request.form['query']
-    desc = []
-    # Loops through the path and then every sawblade in path
-    for instance in results:
-        for inst in instance:
-            name = str(inst['name'])
-            # Checks if input from form equals name from every sawblade
-            if Form.__eq__(name):
-                # Add product information when product name exists
-                id = str(inst['id'])
-                manu = str(inst['manu'])
-                teethgrade = str(inst['teethGrade'])
-                teethamount = str(inst['teethAmount'])
-                desc.append(name)
-                desc.append(id)
-                desc.append(manu)
-                desc.append(teethgrade)
-                desc.append(teethamount)
-        return render_template('search.html', results=desc)
+    return 'ok'
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=7300)
