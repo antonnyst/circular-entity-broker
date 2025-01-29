@@ -1,3 +1,52 @@
+
 h1{
     text-align: center;
+}
+#test{
+    overflow-y: scroll;
+    font-size: 20px;
+    width: 25%;
+    padding-top: 5%;
+    margin: auto;
+    height: 80%;
+}
+.list{
+    cursor: pointer;
+    display: block;
+    margin-top: 12px;
+    font-size: 50px;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.dropdown{
+    cursor: pointer;
+    margin-top: 12px;
+    font-size: 20px;
+    width: 30%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+.dropdown-text{
+    cursor: pointer;
+    margin-top: 12px;
+    font-size: 20px;
+    width: 30%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+.Search{
+    width: 70%;
+    padding: 1%;
+}
+.Searchbutton{
+    padding-top: 1.6%;
+    padding-bottom: 1.5%;
+    width: 5%;
+}
+.Searchbox{
+    display: block;
+    margin: auto;
 }
