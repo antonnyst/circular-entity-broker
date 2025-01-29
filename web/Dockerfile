@@ -6,6 +6,6 @@ ENV FLASK_RUN_HOST=0.0.0.0
 RUN apk add --no-cache gcc musl-dev linux-headers
 COPY req.txt .
 RUN pip install -r req.txt
-EXPOSE 5000
+EXPOSE 80
 COPY . .
 CMD ["flask", "run", "--debug"]
