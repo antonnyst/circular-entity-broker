@@ -15,6 +15,31 @@ def main():
 def generate_productId():
     return uuid.uuid4().hex
 
+
+def validate_valuetype(valueType):
+    match valueType:
+        case "string":
+            return True
+        case "float":
+            return True
+        case _:
+            return False
+
+# Makes sure the value is an propert valueType (and that the valueType is proper)
+def validate_value(value, valueType):
+    if not validate_valuetype(valueType):
+        return False
+    
+    match valueType:
+        case "string":
+            return True # Anything can be a string (i guess)
+        case "float":
+            try:
+                float(value)
+                return True
+            except ValueError:
+                return False
+
 # Create new product
 # NOTE does not check and validate valueType coming from request
 # since rdf schema does not define types for the parameters'
@@ -86,20 +111,95 @@ def abandon():
 
 @app.post("/query")
 def query():
-    # Get query
-    sparql_query = request.form['query']
+    product_name = "sawblade" # Assuming sawblade until API supports specifying product name
     
+    limit = request.json["limit"]
+    offset = request.json["offset"]
+    propertyQueries = request.json["query"]
+
+    if len(propertyQueries) == 0:
+        return {
+            "code": 500,
+            "message": "Invalid properties"
+        } 
+
+    selection_string = ""
+
+    for query in propertyQueries:
+        match query["queryType"]:
+            case "exact":
+                prop = db.get_full_property_uri(product_name, query["property"])
+                if prop == None:
+                    return {
+                        "code": 500,
+                        "message": "Invalid property"
+                    }
+                if not validate_value(query["value"], query["valueType"]):
+                    return {
+                        "code": 500,
+                        "message": "Invalid value/valueType"
+                    }
+
+                selection_string += "?product <{prop}> \"{value}\"^^xsd:{type} .".format(
+                    prop=prop,
+                    value=query["value"],
+                    type=query["valueType"]
+                )
+            case _:
+                return {
+                    "code": 500,
+                    "message": "Invalid queryType"
+                }
+
+    query = """ 
+        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        
+        select ?product ?properties ?values ?datatype where {{
+            # product selection
+            {selection_string}
+
+            # just works?!
+            ?product rdf:type ?types .
+            ?properties rdfs:domain ?types .
+            ?product ?properties ?values .
+            ?properties rdfs:range ?datatype .
+        }} LIMIT {limit} OFFSET {offset}
+    """.format(selection_string=selection_string, limit=limit, offset=offset)
+
     # Check authentication?
     # TODO
 
     # Send to DB
-    headers = {'Accept': 'application/json', "content-type": "application/x-www-form-urlencoded"}
-    
-    response = requests.post(DB_URI+"/repositories/"+REPO_NAME, data={'query': sparql_query}, headers=headers)
-    
+    response = db.sparql_parse(db.send_sparql_query(query).content)
+
+
+    # Convert to correft format
+    result_dict = {}
+
+    for val in response:
+        product_id = val[0].split("/")[-1]
+        if not product_id in result_dict:
+            result_dict[product_id] = { 
+                "productId": product_id,
+                "properties": []
+            }
+
+        result_dict[product_id]["properties"].append({
+            "valueType": val[3].split("#")[-1],
+            "property": val[1].split(":")[-1],
+            "value": val[2],
+        })
+
+    result = []
+
+    for val in result_dict:
+        result.append(result_dict[val])
+
     # Return
-    return response.content
+    return result
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=7100)
+    app.run(debug=True, port=5000)
