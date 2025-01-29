@@ -1,62 +1,34 @@
-from flask import Flask, request, render_template
-from rdflib import Graph, Literal, Namespace
-from rdflib.plugins.sparql import prepareQuery
-from pathlib import Path
-
+import json
+from flask import Flask, request, render_template, redirect, url_for, session
 app = Flask(__name__)
-
-# Initialize RDFLib graph and namespaces
-g = Graph()
-STIX = Namespace("http://stix.mitre.org/")
-EX = Namespace("http://example.org/")
-
-
-pathlist = Path("../rdf").glob('**/*.ttl')
-# Loops through the paths under rdf
-for path in pathlist:
-    results = []
-    # because path is object not string
-    path_in_str = str(path)
-    g.parse(path_in_str, format="turtle")
-    # Query the information from every sawblade
-    query = '''
-        SELECT ?name ?id ?manu ?teethGrade ?teethAmount WHERE {
-            ?instance rdf:type cmp:sawblade .
-            ?instance product:name ?name .
-            ?instance product:id ?id .
-            ?instance product:manufacturer ?manu .
-            ?instance cmp:sawblade:teethGrade ?teethGrade .
-            ?instance cmp:sawblade:teethAmount ?teethAmount .
-        }
-    '''
-    result = g.query(query)
-    results.append(result)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    #For testing
+    products = ['sawblade', 'Cars', 'Computers', 'sawblade']
+    return render_template('index.html', products=products)
 
-@app.route('/search', methods=['POST'])
+@app.route('/resprod', methods=['GET', 'POST'])
+def resprod():
+    #product = request.form.get('data')
+    return 'ok'
+
+
+
+@app.route('/search', methods=['GET', 'POST'])
 def search():
-    # Get information from the html form
-    Form = request.form['query']
-    desc = []
-    # Loops through the path and then every sawblade in path
-    for instance in results:
-        for inst in instance:
-            name = str(inst['name'])
-            # Checks if input from form equals name from every sawblade
-            if Form.__eq__(name):
-                # Add product information when product name exists
-                id = str(inst['id'])
-                manu = str(inst['manu'])
-                teethgrade = str(inst['teethGrade'])
-                teethamount = str(inst['teethAmount'])
-                desc.append(name)
-                desc.append(id)
-                desc.append(manu)
-                desc.append(teethgrade)
-                desc.append(teethamount)
-        return render_template('search.html', results=desc)
+    #For testing
+    #products = ['sawblade', 'Cars', 'Computers']
+    #properties = ['product', 'id', 'manufacturer', 'teethgrade', 'teethamount']
+    return render_template('properties.html', products=products, properties=properties)
+
+@app.route('/resprop', methods=['POST'])
+def resprop():
+    properties = request.get_json('data')
+    #print(properties)
+    return 'ok'
+
+def search():
+    return 'ok'
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=80)

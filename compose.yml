@@ -11,3 +11,7 @@ services:
       - /graphdb_data:/opt/graphdb/home
     ports:
       - "7200:7200"
+  web:
+    build: web/
+    ports:
+      - "80:5000"

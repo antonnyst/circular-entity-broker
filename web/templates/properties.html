@@ -6,12 +6,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{{ url_for('static', filename='search.js') }}"></script>
 </head>
-<body onload="initiate({{products}})">
+<body onload="initiateProperties({{products}}, {{properties}})">
     <div class="showproperties" id="showall">
-        <class="showproperties" id="showprops">
-            
-
-        </div>   
+        
     </div>
+    <div class="showprooperties" id="showprops">
+    </div>   
 </body>
 </html>
