@@ -1,3 +1,5 @@
+"https://code.jquery.com/jquery-3.5.1.min.js"
+
 //Makes buttons for all products
 function initiate(properties){
     const count = [];
@@ -25,6 +27,8 @@ function initiate(properties){
 //Creates labels and input boxes under the button for searching
 function changeValue(properties, product){
     const count = [];
+    var inp = 0;
+    var currentprod = [];
     for(var j = 0; j < properties.length; j++){
         const property = JSON.parse(properties[j]);
         if(property.product == product){
@@ -50,16 +54,18 @@ function changeValue(properties, product){
                     var input = document.createElement("input");
                     input.className = "dropdown-text";
                     input.type = "text";
-
-                    input.id = property[key];
+                    
+                    input.id = inp;
+                    inp++;
                     document.getElementById('showprops').appendChild(input); 
+                    currentprod.push(key);
                 }
             }
             //Button for searching and going back
             var elem2 = document.createElement('button');
             elem2.innerHTML = "Search";    
             prot = returnPrototype(properties, product);
-            elem2.addEventListener("click", event => { CompareProperties(prot) });
+            elem2.addEventListener("click", event => { sendProperties(currentprod, inp) });
             document.getElementById('showprops').appendChild(elem2);
 
             var elem2 = document.createElement('button');
@@ -71,31 +77,19 @@ function changeValue(properties, product){
     }
 }
 
-function CompareProperties(properties){
-    input = []
-    const props = properties[0];
-    for(prop in props){
-        if(props != "product" && document.getElementById(props[prop]) != null){
-            input.push(document.getElementById(props[prop]).value);
-        }
+function sendProperties(prod, inp){
+    var properties = {}
+    for(var i = 0; i < inp; i++){
+        properties[prod[i]] = document.getElementById(i).value;
     }
-    for(var i = 0; i < properties.length; i++){
-        const property = properties[i];
-        count = 0;
-        for (const key in property) {
-            input[count];
-            if(key != "product"){
-                if(input[count].toLowerCase() != property[key].toLowerCase() && input[count] != ""){
-                    break;
-                }
-                count++;
-                if(count == Object.keys(property).length - 1){
-                    return location.href = 'http://127.0.0.1:7300/' + property.manufacturer;
-                }
-            }
+    propertJ = JSON.stringify(properties);
 
-        }
-    }
+    $.ajax({
+       type: 'POST',
+       contentType: 'application/json',
+       data: JSON.stringify(propertJ),
+       url: '/results',
+    });
 }
 
 
