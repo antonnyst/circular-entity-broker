@@ -7,13 +7,13 @@
 cmp:sawblade a rdfs:Class;
 	rdfs:subClassOf broker:product .
 
-cmp:sawblade:teethGrade a rdfs:Property ;
+cmp:sawblade:teethGrade a rdf:Property ;
 	rdfs:domain cmp:sawblade ;
 	rdfs:isDefinedBy <http://ceb.ltu.se/components/sawblade> ;
 	rdfs:label "Teeth Grade" ;
 	rdfs:comment "The fineness/grade of the teeth." .
 
-cmp:sawblade:teethAmount a rdfs:Property ;
+cmp:sawblade:teethAmount a rdf:Property ;
 	rdfs:domain cmp:sawblade ;
 	rdfs:isDefinedBy <http://ceb.ltu.se/components/sawblade> ;
 	rdfs:label "Teeth Amount" ;
