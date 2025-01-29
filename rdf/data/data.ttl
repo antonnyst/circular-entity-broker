@@ -1,43 +1,41 @@
 @prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:	<http://www.w3.org/2000/01/rdf-schema#> .
-
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix cmp: <http://ceb.ltu.se/components/> .
 @prefix broker: <http://ceb.ltu.se/broker/> .
 @prefix data: <http://ceb.ltu.se/data/> .
 
 data:saw01 a cmp:sawblade ;
-    broker:product:name "Träsågblad" ;
-    broker:product:id "1001" ;
-    broker:product:manufacturer "Biltema" ;
-    cmp:sawblade:teethGrade "1.5" ;
-    cmp:sawblade:teethAmount "65" .
+    broker:product:name "Träsågblad"^^xsd:string ;
+    broker:product:id "1001"^^xsd:string ;
+    broker:product:manufacturer "Biltema"^^xsd:string ;
+    cmp:sawblade:teethGrade "2.0"^^xsd:float ;
+    cmp:sawblade:teethAmount "65"^^xsd:float .
 
 data:saw02 a cmp:sawblade ;
-    broker:product:name "GrenSågblad" ;
-    broker:product:id "1002" ;
-    broker:product:manufacturer "Biltema" ;
-    cmp:sawblade:teethGrade "0.5" ;
-    cmp:sawblade:teethAmount "165" .
+    broker:product:name "GrenSågblad"^^xsd:string ;
+    broker:product:id "1002"^^xsd:string ;
+    broker:product:manufacturer "Biltema"^^xsd:string ;
+    cmp:sawblade:teethGrade "2.0"^^xsd:float ;
+    cmp:sawblade:teethAmount "165"^^xsd:float .
 
 data:saw03 a cmp:sawblade ;
-    broker:product:name "KebertSågblad" ;
-    broker:product:id "1003" ;
-    broker:product:manufacturer "Datasektionen" ;
-    cmp:sawblade:teethGrade "10.5" ;
-    cmp:sawblade:teethAmount "1065" .
-
+    broker:product:name "KebertSågblad"^^xsd:string ;
+    broker:product:id "1003"^^xsd:string ;
+    broker:product:manufacturer "Datasektionen"^^xsd:string ;
+    cmp:sawblade:teethGrade "2.0"^^xsd:float ;
+    cmp:sawblade:teethAmount "1065"^^xsd:float .
 
 data:saw04 a cmp:sawblade ;
-    broker:product:name "MetalSågblad" ;
-    broker:product:id "1004" ;
-    broker:product:manufacturer "Maskinsektionen" ;
-    cmp:sawblade:teethGrade "1.55" ;
-    cmp:sawblade:teethAmount "40" .
-
+    broker:product:name "MetalSågblad"^^xsd:string ;
+    broker:product:id "1004"^^xsd:string ;
+    broker:product:manufacturer "Maskinsektionen"^^xsd:string ;
+    cmp:sawblade:teethGrade "1.55"^^xsd:float ;
+    cmp:sawblade:teethAmount "40"^^xsd:float .
 
 data:saw05 a cmp:sawblade ;
-    broker:product:name "FönsterSågblad" ;
-    broker:product:id "1005" ;
-    broker:product:manufacturer "Biltema" ;
-    cmp:sawblade:teethGrade "0.1" ;
-    cmp:sawblade:teethAmount "1650" .
+    broker:product:name "FönsterSågblad"^^xsd:string ;
+    broker:product:id "1005"^^xsd:string ;
+    broker:product:manufacturer "Biltema"^^xsd:string ;
+    cmp:sawblade:teethGrade "0.1"^^xsd:float ;
+    cmp:sawblade:teethAmount "21650"^^xsd:float .
