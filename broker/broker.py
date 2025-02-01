@@ -100,6 +100,26 @@ def query():
     # Return
     return response.content
 
+# Returns all component(product types) names in database
+@app.get("/components")
+def components():
+    query = """ 
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        select * where {
+            ?s rdfs:subClassOf <http://ceb.ltu.se/broker/product> .
+            FILTER (?s != <http://ceb.ltu.se/broker/product>)
+        }
+    """
+
+    response = db.sparql_parse(db.send_sparql_query(query).text)
+    
+    result = []
+    
+    for res in response:
+        result.append(res[0].split("/")[-1])
+
+    return result
 
 if __name__ == '__main__':
     app.run(debug=True, port=7100)
