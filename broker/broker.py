@@ -174,6 +174,18 @@ def query():
     # Send to DB
     response = db.sparql_parse(db.send_sparql_query(query).content)
 
+# Returns all properties of an product type
+@app.get("/properties")
+def properties():
+    product_name = request.json
+
+    props = db.get_properties("http://ceb.ltu.se/components/"+product_name, strip_prefix=True)
+
+    parents = db.get_parent_products("http://ceb.ltu.se/components/"+product_name)
+    for parent in parents:
+        props.extend(db.get_properties(parent, strip_prefix=True))
+
+    return props
 
     # Convert to correft format
     result_dict = {}
