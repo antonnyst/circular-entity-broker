@@ -21,7 +21,7 @@ def send_sparql_update(sparql_update):
 # add_product
 # product_id : string
 # product_name: string
-# properties : [(property,value),(property2, value2)]
+# properties : [(property,value,type),(property2, value2, type2)]
 # property assumed just name with no prefix
 # product_name assumed to be in cmp prefix
 def add_product(product_id, product_name, properties): 
@@ -32,7 +32,8 @@ def add_product(product_id, product_name, properties):
         prop = properties[i]
         prop_name = get_full_property_uri(product_name, prop[0])
         prop_value = prop[1]
-        property_string += " <{}> \"{}\" ".format(prop_name, prop_value)
+        prop_type = prop[2]
+        property_string += " <{}> \"{}\"^^xsd:{} ".format(prop_name, prop_value, prop_type)
         if i < len(properties)-1:
             property_string += ";"
         else:
@@ -40,6 +41,7 @@ def add_product(product_id, product_name, properties):
     
     
     query = """
+        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
         PREFIX cmp: <{COMPONENT_PREFIX}>
         PREFIX data: <{DATA_PREFIX}>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>

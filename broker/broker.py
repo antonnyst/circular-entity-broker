@@ -51,19 +51,19 @@ def product_post():
     # Convert to (uri, value)
     product_properties = list(
         map(lambda prop: 
-            (prop["property"], prop["value"]), 
+            (prop["property"], prop["value"], prop["valueType"]), 
             request.json["properties"]
         )
     )
 
-    # Validate  properties into rdf triples
-    schema_properties = db.get_properties("http://ceb.ltu.se/components/sawblade", strip_prefix=True)
+    # Get valid properties for the product
+    schema_properties = db.get_properties("http://ceb.ltu.se/components/"+product_name, strip_prefix=True)
 
-    parents = db.get_parent_products("http://ceb.ltu.se/components/sawblade")
+    parents = db.get_parent_products("http://ceb.ltu.se/components/"+product_name)
     for parent in parents:
         schema_properties.extend(db.get_properties(parent, strip_prefix=True))
 
-    properties = []
+    # Validate properties against schema
     for prop in product_properties:
         if prop[0] not in schema_properties:
             # They sent an property which is not in our schema
@@ -71,14 +71,17 @@ def product_post():
                 "code": 500,
                 "message": "Invalid property in properties" + prop[0]
             }
-        else:
-            properties.append(prop)
-
+        elif not validate_value(prop[1], prop[2]):
+            return {
+                "code": 500,
+                "message": "Could not validate property " + prop[0] + " / " + prop[1] + " / " + prop[2]
+            }
+        
     # Generate productId
     productId = generate_productId()
 
     # Send query to db
-    result = db.add_product(productId, product_name, properties)
+    result = db.add_product(productId, product_name, product_properties)
     
     if not result.ok:
         return {
