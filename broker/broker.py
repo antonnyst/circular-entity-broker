@@ -104,8 +104,26 @@ def product_put():
 # Remove product
 @app.delete("/product")
 def product_delete():
-    # TODO
-    return "OK"
+    
+    #get product ID
+    productId = request.args.get("productId")
+
+    #Delete productID
+    result = db.delete_product(productId)
+
+    #Error handling 
+    if not result.ok: 
+        return {
+            "code": 500,
+            "message": "Error deleting product",
+            "why?": result.text #Vital, if removed API breaks
+        }
+
+    #This is what we like to see (We see it a lot)
+    return {
+        "code": 200,
+        "message": "OK"
+    } 
 
 @app.post("/abandon") 
 def abandon():
