@@ -67,9 +67,34 @@ def modify_product():
     # TODO
     return
 
-def delete_product():
-    # TODO
-    return
+def delete_product(product_uri):
+
+    product_name = "sawblade"
+
+    query = """
+        PREFIX cmp: <{COMPONENT_PREFIX}>
+        PREFIX data: <{DATA_PREFIX}>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        DELETE {{
+            data:{product_id} ?p ?o
+        }}
+        WHERE {{
+            data:{product_id} ?p ?o .
+        }}
+    """.format(
+        product = product_name,
+        product_id=product_uri,
+        COMPONENT_PREFIX=COMPONENT_PREFIX,
+        DATA_PREFIX=DATA_PREFIX
+    )
+
+    response = send_sparql_update(query)
+
+    if not response.ok:
+        print("Error in delete_product") 
+    
+    return response
 
 # Retrieves an products properties based upon its full uri
 def get_properties(product_uri, strip_prefix=False):
