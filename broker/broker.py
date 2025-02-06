@@ -174,6 +174,31 @@ def query():
     # Send to DB
     response = db.sparql_parse(db.send_sparql_query(query).content)
 
+    # Convert to correft format
+    result_dict = {}
+
+    for val in response:
+        product_id = val[0].split("/")[-1]
+        if not product_id in result_dict:
+            result_dict[product_id] = { 
+                "productId": product_id,
+                "properties": []
+            }
+
+        result_dict[product_id]["properties"].append({
+            "valueType": val[3].split("#")[-1],
+            "property": val[1].split(":")[-1],
+            "value": val[2],
+        })
+
+    result = []
+
+    for val in result_dict:
+        result.append(result_dict[val])
+
+    # Return
+    return result
+
 # Returns all properties of an product type
 @app.get("/properties")
 def properties():
