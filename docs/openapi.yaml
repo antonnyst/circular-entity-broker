@@ -221,12 +221,13 @@ paths:
           $ref: "#/components/responses/Error"
   /properties:
     get:
-      requestBody:
-        content: 
-          application/json:
-            schema: 
-              type: string
-              example: sawblade
+      parameters:
+        - name: product
+          in: query
+          schema:
+            type: string
+            format: uri
+            example: "sawblade"
       responses:
         "200":
           description: OK
