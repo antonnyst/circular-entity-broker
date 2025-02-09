@@ -225,7 +225,7 @@ def query():
 # Returns all properties of an product type
 @app.get("/properties")
 def properties():
-    product_name = request.json
+    product_name = request.args.get('product')
 
     props = db.get_properties("http://ceb.ltu.se/components/"+product_name, strip_prefix=True)
 

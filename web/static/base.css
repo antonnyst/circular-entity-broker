@@ -1,44 +1,21 @@
-
-h1{
+h2, h3{
     text-align: center;
-}
-#test{
-    overflow-y: scroll;
-    font-size: 20px;
-    width: 25%;
-    padding-top: 5%;
-    margin: auto;
-    height: 80%;
-}
-.list{
-    cursor: pointer;
-    display: block;
-    margin-top: 12px;
-    font-size: 50px;
-    width: 80%;
-    margin-left: auto;
-    margin-right: auto;
 }
 .dropdown{
     cursor: pointer;
     margin-top: 12px;
     font-size: 20px;
     width: 30%;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
+    margin-right: -10%;
 }
 .dropdown-text{
     cursor: pointer;
     margin-top: 12px;
     font-size: 20px;
-    width: 30%;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
+    width: 20%;
 }
 .Search{
-    width: 70%;
+    width: 40%;
     padding: 1%;
 }
 .Searchbutton{
@@ -46,7 +23,55 @@ h1{
     padding-bottom: 1.5%;
     width: 5%;
 }
-.Searchbox{
-    display: block;
+
+#showtable{
+    border: 3px, black;
+    border-collapse: collapse;
+    box-align: center;
     margin: auto;
+}
+th, td {
+    border: 2px solid black;
+    padding: 20px;
+    text-align: left;
+    font-size: 15px;
+}
+header{
+    border: 2px solid black;
+}
+#showprops{
+    margin-top: 5px;
+    align-items: center;
+    justify-content: center;
+}
+footer{
+    width: 100%;
+}
+html, body {
+    height: 100%; 
+    margin: 0; 
+}
+#showall{
+    flex: 1;
+    padding: 20px;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 90vh; /* Ensure body takes up full height */
+}
+.disp{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-Bottom: 20px;
+}
+h1{
+    text-align: center;
+}
+#search{
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
 }
