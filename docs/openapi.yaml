@@ -97,13 +97,25 @@ components:
       type: object
       properties:
         productId:
-          type: string
-          example: "abc123"
+          $ref: "#/components/schemas/UUID4"
         properties:
           type: array
           items:
             $ref: "#/components/schemas/PropertyValue"
 
+    CompanyAccessToken:
+      type: object
+      properties:
+        companyId:
+          $ref: "#/components/schemas/UUID4"
+        accessToken:
+          type: string
+          description: A 64-byte access token in string hex format
+          example: "063fc1d86c6074cccf9d9da0644d7c19ff98dad92ab008fa14895e0e2fcc37c73aaa7ecbca67095a90ab6fa2f2f8e5fc64d71290ec68b224a25088f8f6228993"
+
+    UUID4:
+      type: string
+      example: "589a65f1-ea3f-4ba7-9ae4-9953a2b885d2"
 
     Error:
       type: object
@@ -118,10 +130,7 @@ components:
   responses:
       Unauthorized:
         description: Unauthorized
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Error"
+
       Error:
         description: Internal server error
         content:
@@ -129,9 +138,26 @@ components:
             schema:
               $ref: "#/components/schemas/Error"
 
+  securitySchemes:
+    CompanyAccessToken:
+      type: apiKey
+      in: header
+      name: X-API-CAT
+      description: A Company Access Token, which is given when first registering the company. Consists of a 64-byte token in string hex format.
+
+tags:
+  - name: ProductQuerying
+    description: Endpoints related to product creation and querying
+  - name: CompanyRegister
+    description: >
+      Endpoints related to the creation, deletion and updating of companies and protected company data.
+      All endpoints in this category except `POST /register` require a Company Access Token (CAT) sent in the X-API-CAT header in the HTTP request.
+
 paths:
   /query:
     post:
+      tags:
+        - ProductQuerying
       requestBody:
         content: 
           application/json:
@@ -152,6 +178,8 @@ paths:
           $ref: "#/components/responses/Error"
   /product:
     post:
+      tags:
+        - ProductQuerying
       requestBody:
         content:
           application/json:
@@ -169,6 +197,8 @@ paths:
         "500":
           $ref: "#/components/responses/Error"
     put:
+      tags:
+        - ProductQuerying
       parameters:
         - name: productId
           in: query
@@ -191,6 +221,8 @@ paths:
         "500":
           $ref: "#/components/responses/Error"
     delete:
+      tags:
+        - ProductQuerying
       parameters:
         - name: productId
           in: query
@@ -205,6 +237,8 @@ paths:
           $ref: "#/components/responses/Error"
   /components:
     get:
+      tags:
+        - ProductQuerying
       responses:
         "200":
           description: OK
@@ -228,6 +262,8 @@ paths:
             type: string
             format: uri
             example: "sawblade"
+      tags:
+        - ProductQuerying
       responses:
         "200":
           description: OK
@@ -237,6 +273,105 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Property"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /register:
+    post:
+      tags:
+        - CompanyRegister
+      description: Register a new company to receive an Access Token and upload product meta data
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Fake Company"
+
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompanyAccessToken"
+        "500":
+          $ref: "#/components/responses/Error"
+    delete:
+      tags:
+        - CompanyRegister
+      security:
+        - CompanyAccessToken: []
+      description: Delete the company and all related data
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/CompanyAccessToken"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompanyAccessToken"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/Error"
+  /interrogation:
+    get:
+      tags:
+        - CompanyRegister
+      security:
+      - CompanyAccessToken: []
+      description: Get all registered base URLs for interrogations
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: "https://fakecompany.ceb.ltu.se/v1"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/Error"
+    post:
+      tags:
+        - CompanyRegister
+      security:
+      - CompanyAccessToken: []
+      description: Register a new base URL for product data interrogations by the broker
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  example: "https://fakecompany.ceb.ltu.se/v1"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    example: "https://fakecompany.ceb.ltu.se/v1"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "500":
