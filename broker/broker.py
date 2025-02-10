@@ -56,12 +56,14 @@ def product_post():
         )
     )
 
-    # Get valid properties for the product
-    schema_properties = db.get_properties("http://ceb.ltu.se/components/"+product_name, strip_prefix=True)
+    # Validate  properties into rdf triples
+    schema_properties = list(map(lambda x: x[0], db.get_properties("http://ceb.ltu.se/components/sawblade"+product_name, strip_prefix=True)))
 
     parents = db.get_parent_products("http://ceb.ltu.se/components/"+product_name)
     for parent in parents:
-        schema_properties.extend(db.get_properties(parent, strip_prefix=True))
+        schema_properties.extend(
+            list(map(lambda x: x[0], db.get_properties(parent, strip_prefix=True)))
+        )
 
     # Validate properties against schema
     for prop in product_properties:
@@ -92,7 +94,7 @@ def product_post():
     # Return OK with productID and properties.
     return {
         "productId": productId,
-        "properties": product_properties
+        "properties": request.json["properties"]
     }
 
 # Modify product
@@ -231,7 +233,17 @@ def properties():
     for parent in parents:
         props.extend(db.get_properties(parent, strip_prefix=True))
 
-    return props
+    result = []
+
+    for prop in props:
+        result.append(
+            {
+                "property": prop[0],
+                "valueType": prop[1]
+            }
+        )
+
+    return result
 
 # Returns all component(product types) names in database
 @app.get("/components")

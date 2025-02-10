@@ -23,11 +23,24 @@ components:
           description: The property
           type: string
           example: "teethGrade"
+    PropertyValue:
+      type: object
+      properties:
+        valueType:
+          type: string
+          description: Which type the value has, if `float` the broker will try to convert and throw an error if the value cannot be parset to a float.
+          enum:
+            - string
+            - float
+          example: "float"
+        property:
+          description: The property
+          type: string
+          example: "teethGrade"
         value:
           description: The value
           type: string
-          example: "2.3"
-
+          example: "2.3"       
     PropertyQuery:
       type: object
       properties:
@@ -77,7 +90,7 @@ components:
         properties:
           type: array
           items:
-            $ref: "#/components/schemas/Property"
+            $ref: "#/components/schemas/PropertyValue"
 
 
     Product:
@@ -89,7 +102,7 @@ components:
         properties:
           type: array
           items:
-            $ref: "#/components/schemas/Property"
+            $ref: "#/components/schemas/PropertyValue"
 
 
     Error:
@@ -223,8 +236,7 @@ paths:
               schema:
                 type: array
                 items:
-                  type: string
-                  example: "teethGrade"
+                  $ref: "#/components/schemas/Property"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "500":
