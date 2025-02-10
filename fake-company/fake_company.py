@@ -11,6 +11,13 @@ BROKER_URL = "http://localhost:7100"
 
 registered = False
 
+# TODO:
+# - Registration (unimplemented on the broker for now)
+# - Product creation based on predefined list
+# - Company deletion (unimplemented on broker)
+# - Product interrogation with random values
+# - Product randomization/generation
+
 # Load JSON data
 products = []
 with open("product_data.json", "r") as file:
