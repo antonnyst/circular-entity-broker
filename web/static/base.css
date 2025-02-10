@@ -24,18 +24,23 @@ h2, h3{
     width: 5%;
 }
 
-#showtable{
-    border: 3px, black;
-    border-collapse: collapse;
-    box-align: center;
+#showtable {
+    border: 3px solid black; 
+    border-collapse: collapse; 
     margin: auto;
+    width: 80%; 
 }
+
 th, td {
-    border: 2px solid black;
+    width: 15%;
     padding: 20px;
-    text-align: left;
     font-size: 15px;
+    border: 1px solid black;
+    border-top: 0px;
+    border-collapse: collapse;
+    text-align: left;
 }
+
 header{
     border: 2px solid black;
 }

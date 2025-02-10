@@ -44,6 +44,7 @@ def check_float(value):
 @app.route('/resultprop', methods=['POST'])
 def resprop():
     session['compare'] = []
+    i = 0
     #Formatting the json request as specified
     data = {
             "limit": 10,
@@ -52,17 +53,10 @@ def resprop():
      }
     #Changing query according to the specification for every property
     properties = request.get_json()["data"]
+    valueType = request.get_json()["valueType"]
     for key, value in properties.items():
-        if check_float(value) and key == "teethAmount":
-            usevalue = int(value)
-            data["query"].append({"queryType": "exact", "valueType" : "float", "property": key, "value": usevalue})
-
-        elif check_float(value) and key != "id":
-            usevalue = float(value)
-            data["query"].append({"queryType": "exact", "valueType" : "float", "property": key, "value": usevalue})
-
-        else:
-            data["query"].append({"queryType": "exact", "valueType" : "string", "property": key, "value": value})
+            data["query"].append({"queryType": "exact", "valueType" : valueType[i], "property": key, "value": value})
+            i += 1
     session['compare'] = get_compare(data)
 
     return 'ok'

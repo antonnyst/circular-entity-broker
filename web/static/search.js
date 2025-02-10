@@ -9,7 +9,6 @@ function initiate(products){
 
 function initiateProperties(products, properties, product){
     dropdown(products, product);
-
     //Creating labels and input fields for properties
     for(var i = 0; i < properties.length; i++){
         var container = document.createElement('div');
@@ -17,13 +16,13 @@ function initiateProperties(products, properties, product){
 
         var label = document.createElement('label');
         label.className = "dropdown";
-        label.innerHTML = properties[i];   
+        label.innerHTML = properties[i].property;   
         label.id = i; 
 
         var input = document.createElement("input");
         input.className = "dropdown-text";
         input.type = "text";
-        input.id = properties[i];
+        input.id = properties[i].property;
         container.appendChild(label);
         container.appendChild(input);
         document.getElementById('showprops').appendChild(container); 
@@ -40,10 +39,7 @@ function initiateProperties(products, properties, product){
 
 function getmatch(products, product, match){
     dropdown(products, product);
-
-    matchvalue = [];
-    var tbl = document.createElement('table');
-    tbl.id = "showtable";
+    var check = 0;
     //If the product doesn't exist print "Finns ingen sådan produkt"
     if(match.length == 0){
         head = document.createElement('h1');
@@ -52,44 +48,39 @@ function getmatch(products, product, match){
     
     //If the product exist make a table with property and value
     }else{
-        var i = 1
-        var trhead = document.createElement('tr');
-        var thprop = document.createElement('th');
-        var thval = document.createElement('th');
-
-        thprop.textContent = "property";
-        thval.textContent = "value";
-        trhead.appendChild(thprop);
-        trhead.appendChild(thval);
-        tbl.appendChild(trhead)
         match.forEach(obj => {
             if (obj.properties) {
-                var tr = document.createElement('tr');
-                var tdprop = document.createElement('th');
-                var tdval = document.createElement('th');
-                tdprop.textContent = "Company";
-                tdval.textContent = i;
+                var tbl = document.createElement('table');
+                tbl.id = "showtable";
 
-                tr.appendChild(tdprop);
-                tr.appendChild(tdval);
-                tbl.appendChild(tr);
-
-                i++;
+                var trprop = document.createElement('tr');
+                if(check == 0){
+                    obj.properties.forEach(prop => {
+                        var thprop = document.createElement('th');
+    
+                        thprop.textContent = prop.property;
+    
+                        trprop.appendChild(thprop);
+                        
+                    });
+                    tbl.appendChild(trprop);
+                    check++;
+                }
+                
+                
+                var trval = document.createElement('tr');
                 obj.properties.forEach(prop => {
-                    var tr = document.createElement('tr');
-                    var tdprop = document.createElement('td');
                     var tdval = document.createElement('td');
-                    tdprop.textContent = prop.property;
+
                     tdval.textContent = prop.value;
 
-                    tr.appendChild(tdprop);
-                    tr.appendChild(tdval);
-                    tbl.appendChild(tr)
-                    matchvalue.push(prop.value)
+                    trval.appendChild(tdval);
+                    
                 });
+                tbl.appendChild(trval);
+                document.getElementById('showprops').appendChild(tbl);
             }
         });
-        document.getElementById('showprops').appendChild(tbl);
     }
 }
 
@@ -113,12 +104,15 @@ function redirect(){
 
 //Sends value for all properties to resultprop with POST request
 function sendProperties(properties){
-    var inputprops = {}
+    var inputprops = {};
+    var valueType = [];
     for(var i = 0; i < properties.length; i++){
-        if(document.getElementById(properties[i]).value != ''){
-            inputprops[properties[i]] = document.getElementById(properties[i]).value;
+        if(document.getElementById(properties[i].property).value != ''){
+            inputprops[properties[i].property] = document.getElementById(properties[i].property).value;
+            valueType.push(properties[i].valueType);
         }
     }
+    console.log(valueType)
     if (Object.keys(inputprops).length === 0) {
         alert('You need to input a value');
         return;
@@ -128,7 +122,7 @@ function sendProperties(properties){
         url: '/resultprop',
         type: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify({ 'data': inputprops }),
+        data: JSON.stringify({ 'data': inputprops, 'valueType': valueType}),
         success: function(response) {
             window.location.href = "/compare";
         }
