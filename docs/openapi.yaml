@@ -376,3 +376,27 @@ paths:
           $ref: "#/components/responses/Unauthorized"
         "500":
           $ref: "#/components/responses/Error"
+    delete:
+      tags:
+        - CompanyRegister
+      security:
+      - CompanyAccessToken: []
+      description: Remove a URL for interrogations
+      parameters:
+        - name: url
+          in: query
+          schema:
+            type: string
+            example: "https://fakecompany.ceb.ltu.se/v1"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "https://fakecompany.ceb.ltu.se/v1"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/Error"
