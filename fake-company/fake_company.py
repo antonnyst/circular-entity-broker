@@ -23,7 +23,7 @@ products = []
 with open("product_data.json", "r") as file:
     data = json.load(file)
     for prod in data:
-      products.append(Product(prod["pid"], prod["name"], prod["description"], prod["price"], prod["stock"], prod["creation_date"]))
+      products.append(Product(prod["pid"], prod["name"], prod["description"], prod["price"], prod["stock"], prod["creation_date"], COMPANY_NAME))
 
 
 @app.route("/")
@@ -45,23 +45,16 @@ def invoke_registration():
 
   return "OK"
 
+# Invoke fake_company to create all products from json in the broker
 @app.get("/invoke/product_creation")
 def invoke_product_creation():
-  # count = 0
-  # for prod in products:
-  #   count += 1
-  #   json_data = {"properties": []}
-  #   x = requests.post(BROKER_URL + "/product", json = json_data)
+  product_ids = []
+  for prod in products:
+    json_data = {"properties": prod.toProperties()}
+    x = requests.post(BROKER_URL + "/product", json = json_data)
+    product_ids.append(x.json()["productId"])
 
-  #   print(x.text)
-
-  #   if count > 1: return "Exceeded"
-  
-  json_data = {"properties": []}
-  x = requests.post(BROKER_URL + "/product", json = json_data)
-  print(x.status_code)
-
-  return "OK"
+  return product_ids
     
 
 @app.route("/api/fluid_data")
