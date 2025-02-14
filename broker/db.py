@@ -65,9 +65,9 @@ def add_product(product_id, product_name, properties):
 
     return response
 
-def modify_product():
-    # TODO
-    return
+# def modify_product(product_id, product_name, properties):
+    
+
 
 def delete_product(product_uri):
 

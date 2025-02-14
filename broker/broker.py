@@ -55,30 +55,10 @@ def product_post():
             request.json["properties"]
         )
     )
+    
+    #Get schema properties
+    validateProps(product_name, product_properties)
 
-    # Validate  properties into rdf triples
-    schema_properties = list(map(lambda x: x[0], db.get_properties("http://ceb.ltu.se/components/sawblade"+product_name, strip_prefix=True)))
-
-    parents = db.get_parent_products("http://ceb.ltu.se/components/"+product_name)
-    for parent in parents:
-        schema_properties.extend(
-            list(map(lambda x: x[0], db.get_properties(parent, strip_prefix=True)))
-        )
-
-    # Validate properties against schema
-    for prop in product_properties:
-        if prop[0] not in schema_properties:
-            # They sent an property which is not in our schema
-            return {
-                "code": 500,
-                "message": "Invalid property in properties" + prop[0]
-            }
-        elif not validate_value(prop[1], prop[2]):
-            return {
-                "code": 500,
-                "message": "Could not validate property " + prop[0] + " / " + prop[1] + " / " + prop[2]
-            }
-        
     # Generate productId
     productId = generate_productId()
 
@@ -97,11 +77,69 @@ def product_post():
         "properties": request.json["properties"]
     }
 
+
+def validateProps(product_name, product_properties):
+    # Get schema properties
+    schema_properties = list(map(lambda x: x[0], db.get_properties("http://ceb.ltu.se/components/"+product_name, strip_prefix=True)))
+
+    parents = db.get_parent_products("http://ceb.ltu.se/components/"+product_name)
+    for parent in parents:
+        schema_properties.extend(
+            list(map(lambda x: x[0], db.get_properties(parent, strip_prefix=True)))
+        )
+
+    # Validate properties against schema
+    for prop in product_properties:
+        if prop[0] not in schema_properties:
+            # They sent an property which is not in our schema
+            return False
+        elif not validate_value(prop[1], prop[2]):
+            return False
+    
+    return True
+            
+        
+
 # Modify product
 @app.put("/product")
 def product_put():
-    # TODO
-    return "OK"
+
+    product_name = "sawblade" #remove later
+    
+    productId = request.args.get("productId")
+
+    product_properties = list(
+        map(lambda prop: 
+            (prop["property"], prop["value"], prop["valueType"]), 
+            request.json["properties"]
+        )
+    )
+
+    validateProps(productId, product_properties)
+
+
+    result1 = db.delete_product(productId)
+    if not result1.ok: 
+        return {
+            "code": 500,
+            "message": "Error removing old data",
+            "why?": result1.text #Vital, if removed API breaks
+        }
+         
+    
+    result2 = db.add_product(productId, product_name, product_properties)
+    if not result2.ok: 
+        return {
+            "code": 500,
+            "message": "Error adding new data",
+            "why": result2.text #Vital, if removed API breaks
+        }
+    else: 
+        return {
+            "code": 200,
+            "message": "Ok"
+        }
+
 
 # Remove product
 @app.delete("/product")
