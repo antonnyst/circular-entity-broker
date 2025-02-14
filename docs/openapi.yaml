@@ -4,8 +4,8 @@ info:
   description: API Spec for the Circular Entity Broker.
   version: 0.1.0
 servers:
-  - url: https://api.ceb.ltu.se/v1
-  - url: https://api.ceb.rekursion.se/v1
+  - url: http://localhost:7100/
+  - url: http://ceb.rekursion.se:7100/
 
 components:
   schemas:
