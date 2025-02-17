@@ -400,3 +400,53 @@ paths:
           $ref: "#/components/responses/Unauthorized"
         "500":
           $ref: "#/components/responses/Error"
+  /fluid_properties:
+    get:
+      tags:
+        - ProductQuerying
+      parameters:
+        - name: product
+          in: query
+          schema:
+            type: string
+            format: uri
+            example: "sawblade"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Property"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/Error"
+  /interrogate:
+    get:
+      tags:
+        - ProductQuerying      
+      parameters:
+        - name: productId
+          in: query
+          schema:
+            type: string
+        - name: property
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PropertyValue"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/Error"
