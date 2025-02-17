@@ -90,11 +90,9 @@ def invoke_product_update():
   updated_products = company.updateProducts(int(request.args.get("amount")))
   updated_product_jsons = []
   for product in updated_products:
-    json_data = {"properties": product.toProperties()}
+    json = {"properties": product.toProperties()}
     headers = {"X-API-CAT": company.access_token}
-    # TODO
-    # response = requests.post(BROKER_URL + "/product", json = json_data)
-    # product.id = response.json()["productId"]
+    requests.put(BROKER_URL + "/product?productId=" + product.id, json=json, headers=headers)
     updated_product_jsons.append(product.toObject())
 
   return updated_product_jsons
@@ -109,11 +107,8 @@ def invoke_product_remove():
   removed_products = company.removeProducts(int(request.args.get("amount")))
   removed_product_jsons = []
   for product in removed_products:
-    json_data = {"properties": product.toProperties()}
     headers = {"X-API-CAT": company.access_token}
-    # TODO
-    # response = requests.post(BROKER_URL + "/product", json = json_data)
-    # product.id = response.json()["productId"]
+    requests.delete(BROKER_URL + "/product?productId=" + product.id, headers=headers)
     removed_product_jsons.append(product.toObject())
 
   return removed_product_jsons
