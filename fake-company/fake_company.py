@@ -1,68 +1,101 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import requests, sys
-from product import Product
+from product import Sawblade
+from company import FakeCompany
 import json
 
 app = Flask(__name__)
 
 # TEMP: Hard-coded config values
-COMPANY_NAME = "FakeCompany"
 BROKER_URL = "http://localhost:7100"
+company = FakeCompany()
+print("Created FakeCompany with name", company.name)
 
-registered = False
-
-# TODO:
-# - Registration (unimplemented on the broker for now)
-# - Product creation based on predefined list
-# - Company deletion (unimplemented on broker)
-# - Product interrogation with random values
-# - Product randomization/generation
-
-# Load JSON data
-products = []
-with open("product_data.json", "r") as file:
-    data = json.load(file)
-    for prod in data:
-      products.append(Product(prod["pid"], prod["name"], prod["description"], prod["price"], prod["stock"], prod["creation_date"], COMPANY_NAME))
-
+## API Endpoints (for internal control only, not meant to be a public API):
+# GET   /invoke/register - register fake_company with the broker, returns access token
+# GET   /invoke/unregister - delete all products and request fake_company to be removed from the broker
+# GET   /invoke/create?amount=X - generate X amount of new products (returns copies of the new products as json)
+# GET   /invoke/update?amount=X - change the description of X amount of random products
+# GET   /invoke/delete?amount=X - delete X amount of random products
+# GET   /products - get all products currently belonging to fake_company
+# 
+# GET   /api/fluid_data?pid=X - get fluid data (stock/price) for product with product id = X
 
 @app.route("/")
 def hello_world():
-    return f"<h1>{COMPANY_NAME}</h1>"
-  
-@app.get("/invoke/registration")
+  return f"<h1>{company.name}</h1>"
+
+@app.get("/invoke/register")
 def invoke_registration():
   # Invoke a registration with the broker. This should only be used once after startup
-  if registered:
+  if company.registered:
     return "Already registered", 400
   
-  json_data = {"name": COMPANY_NAME}
-  x = requests.post(BROKER_URL + "/register", json = json_data)
+  # Send request to broker
+  json = {"name": company.name}
+  response = requests.post(BROKER_URL + "/register", json)
+  data = response.json()
+  access_token = data["accessToken"]
+  company_id = data["companyId"]
+  # print("Registered, access token:", access_token)
 
-  print(x.text)
+  if response.status_code == 200:
+    company.access_token = access_token
+    company.id = company_id
+    company.registered = True
 
-  # TODO: Not yet implemented in broker
+  return access_token
 
-  return "OK"
+@app.get("/invoke/unregister")
+def invoke_unregistration():
+  # Invoke an unregistration with the broker. This will remove all company data and products from the broker
+  if not company.registered:
+    return "Not registered", 400
+  
+  # Send request to broker
+  headers = {"X-API-CAT": company.access_token}
+  requests.delete(BROKER_URL + "/register", headers)
 
-# Invoke fake_company to create all products from json in the broker
-@app.get("/invoke/product_creation")
+  return "Unregistered"
+
+
+# Invoke fake_company to create X amount of new randomized products
+@app.get("/invoke/create")
 def invoke_product_creation():
-  product_ids = []
-  for prod in products:
-    json_data = {"properties": prod.toProperties()}
-    x = requests.post(BROKER_URL + "/product", json = json_data)
-    product_ids.append(x.json()["productId"])
+  # TODO: Not implemented in broker yet
+  # if not company.registered:
+  #   return "Not registered", 400
+  
+  new_products = company.generateProducts(int(request.args.get("amount")))
+  company.products.extend(new_products)
+  new_product_jsons = []
+  for product in new_products:
+    json_data = {"properties": product.toProperties()}
+    # response = requests.post(BROKER_URL + "/product", json = json_data)
+    # product.id = response.json()["productId"]
+    new_product_jsons.append(product.toObject())
 
-  return product_ids
-    
+  return new_product_jsons
 
+
+# Return all stored products (mainly for debug purposes)
+@app.route("/products")
+def all_products():
+  products = []
+  for product in company.products:
+    products.append(product.toObject())
+  return products
+
+
+# Serve fluid data to the broker
 @app.route("/api/fluid_data")
-def update_fluid_data():
+def fluid_data():
+  # Get product id from path param "pid"
   pid = request.args.get("pid", "")
   if pid != "":
-    for prod in products:
-      if prod.product_id == pid:
-        return prod.toJson()
+    # Find product and return its fluid data
+    for product in company.products:
+      if product.product_id == pid:
+        return product.generate_fluid_data()
   else:
     return "Invalid PID"
