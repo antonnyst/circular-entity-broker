@@ -25,6 +25,7 @@ print("Created FakeCompany with name", company.name)
 def hello_world():
   return f"<h1>{company.name}</h1>"
 
+# TODO: Not implemented in broker yet
 @app.get("/invoke/register")
 def invoke_registration():
   # Invoke a registration with the broker. This should only be used once after startup
@@ -46,6 +47,7 @@ def invoke_registration():
 
   return access_token
 
+# TODO: Not implemented in broker yet
 @app.get("/invoke/unregister")
 def invoke_unregistration():
   # Invoke an unregistration with the broker. This will remove all company data and products from the broker
@@ -70,12 +72,52 @@ def invoke_product_creation():
   company.products.extend(new_products)
   new_product_jsons = []
   for product in new_products:
-    json_data = {"properties": product.toProperties()}
-    # response = requests.post(BROKER_URL + "/product", json = json_data)
-    # product.id = response.json()["productId"]
+    json = {"properties": product.toProperties()}
+    headers = {"X-API-CAT": company.access_token}
+    response = requests.post(BROKER_URL + "/product", json=json, headers=headers)
+    product.id = response.json()["productId"]
     new_product_jsons.append(product.toObject())
 
   return new_product_jsons
+
+# Invoke fake_company to update X amount of random products
+@app.get("/invoke/update")
+def invoke_product_update():
+  # TODO: Not implemented in broker yet
+  # if not company.registered:
+  #   return "Not registered", 400
+  
+  updated_products = company.updateProducts(int(request.args.get("amount")))
+  updated_product_jsons = []
+  for product in updated_products:
+    json_data = {"properties": product.toProperties()}
+    headers = {"X-API-CAT": company.access_token}
+    # TODO
+    # response = requests.post(BROKER_URL + "/product", json = json_data)
+    # product.id = response.json()["productId"]
+    updated_product_jsons.append(product.toObject())
+
+  return updated_product_jsons
+
+# Invoke fake_company to remove X amount of random products
+@app.get("/invoke/remove")
+def invoke_product_remove():
+  # TODO: Not implemented in broker yet
+  # if not company.registered:
+  #   return "Not registered", 400
+  
+  removed_products = company.removeProducts(int(request.args.get("amount")))
+  removed_product_jsons = []
+  for product in removed_products:
+    json_data = {"properties": product.toProperties()}
+    headers = {"X-API-CAT": company.access_token}
+    # TODO
+    # response = requests.post(BROKER_URL + "/product", json = json_data)
+    # product.id = response.json()["productId"]
+    removed_product_jsons.append(product.toObject())
+
+  return removed_product_jsons
+
 
 
 # Return all stored products (mainly for debug purposes)
@@ -97,5 +139,7 @@ def fluid_data():
     for product in company.products:
       if product.product_id == pid:
         return product.generate_fluid_data()
+      
+    return "No product found with requested PID", 400
   else:
-    return "Invalid PID"
+    return "Invalid PID", 400
