@@ -1,0 +1,25 @@
+@prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:	<http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+
+@prefix broker: <http://ceb.ltu.se/broker/> .
+
+broker:company a rdfs:Class .
+
+broker:company:name a rdf:Property ;
+	rdfs:domain broker:company ;
+	rdfs:range xsd:string ;
+	rdfs:label "Company Name" ;
+	rdfs:comment "The name of the company." .
+
+broker:company:location a rdf:Property ;
+	rdfs:domain broker:company ;
+	rdfs:range xsd:string ;
+	rdfs:label "Location" ;
+	rdfs:comment "Location of company headquarters" .
+
+broker:company:accessToken a rdf:Property ;
+	rdfs:domain broker:product ;
+	rdfs:range xsd:string ;
+	rdfs:label "Product Manufacturer" ;
+	rdfs:comment "The company manufacturing the product" .
