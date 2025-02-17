@@ -64,7 +64,7 @@ class Sawblade:
   def generate_fluid_data(self):
     # Change price sometimes
     if random.randint(1, 4) == 1:
-      self.price = random.random() * (self.max_price - self.min_price) + self.min_price
+      self.price = round(random.random() * (self.max_price - self.min_price) + self.min_price, 2)
 
     # Change stock sometimes
     if random.randint(1, 4) == 1:
@@ -123,7 +123,7 @@ def generate_random_sawblade(company_name, naming_scheme):
   
   sawblade.min_price = random.randint(1, 100)
   sawblade.max_price = sawblade.min_price + random.randint(1, 50)
-  sawblade.price = random.random() * (sawblade.max_price - sawblade.min_price) + sawblade.min_price
+  sawblade.price = round(random.random() * (sawblade.max_price - sawblade.min_price) + sawblade.min_price, 2)
   sawblade.max_stock = random.randint(10, 5000)
   sawblade.stock = random.randint(0, sawblade.max_stock)
   
