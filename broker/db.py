@@ -65,9 +65,9 @@ def add_product(product_id, product_name, properties):
 
     return response
 
-def modify_product():
-    # TODO
-    return
+
+    
+
 
 def delete_product(product_uri):
 
@@ -99,14 +99,17 @@ def delete_product(product_uri):
     return response
 
 # Retrieves an products properties based upon its full uri
+# Returns (propertyName, valueType)
 def get_properties(product_uri, strip_prefix=False):
     #print(product_uri)
     query = """ 
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-        select ?property where {{
+        select ?property ?type where {{
             ?property rdf:type rdf:Property ;
-                    rdfs:domain <{product}> .
+                      rdfs:domain <{product}> .
+                      
+            ?property rdfs:range ?type .
         }}
     """.format(product = product_uri)
 
@@ -115,11 +118,11 @@ def get_properties(product_uri, strip_prefix=False):
     response = send_sparql_query(query)
 
     # Convert list of lists to just a list
-    properties = list(map(lambda x: x[0], sparql_parse(response.text)))
+    properties = sparql_parse(response.text)
     
-    # Remove the product prefix
+    # Remove the prefixes
     if strip_prefix:
-        properties = list(map(lambda x: x.split(":")[-1], properties))
+        properties = list(map(lambda x: [x[0].split(":")[-1], x[1].split("#")[-1]], properties))
     
     return properties
 
@@ -150,7 +153,7 @@ def get_parent_products(product_uri):
 # returns string or None if not found
 def get_full_property_uri(product_name, prop, prefix=COMPONENT_PREFIX):
     # First check properties of specified products
-    properties = get_properties(prefix + product_name, strip_prefix=True)
+    properties = list(map(lambda x: x[0], get_properties(prefix + product_name, strip_prefix=True)))
     if prop in properties:
         # We found the property full uri should be
         return prefix + product_name + ":" + prop
@@ -158,7 +161,7 @@ def get_full_property_uri(product_name, prop, prefix=COMPONENT_PREFIX):
     # Then check properties of parent products
     parents = get_parent_products(prefix + product_name)
     for parent in parents:
-        properties = get_properties(parent, strip_prefix=True)
+        properties = list(map(lambda x: x[0], get_properties(parent, strip_prefix=True)))
         if prop in properties:
             return parent + ":" + prop
 

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Circular enitity broker</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='base.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='search.js') }}"></script>
+</head>
+<body>
+  <header>
+    <h2>Circular entity broker</h2>
+  </header>
+    <div class="showproperties" id="showall">
+    </div>
+    <div class="showprooperties" id="showprops">
+    </div> 
+    <footer>
+      <h3>
+          If you have any questions, pls email us at: info@circular
+      </h3>
+    </footer>  
+    <script>
+        const products = {{ products|safe }};
+        const product = {{ product|tojson }};
+        const match = {{match|safe}};
+      
+        window.onload = function() {
+          getmatch(products, product, match);
+        };
+      </script>
+      
+</body>
+</html>
