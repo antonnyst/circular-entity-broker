@@ -1,5 +1,5 @@
 import json, random
-from product import generate_random_sawblade
+from product import generate_random_sawblade, generate_sawblade_desc
 
 class FakeCompany:
   id = ""
@@ -39,9 +39,30 @@ class FakeCompany:
     return new_products
   
   def updateProducts(self, amount):
+    # Pick random products to update
+    products_to_update = []
+    while len(products_to_update) < min(amount, len(self.products)):
+      product = random.choice(self.products)
+      if product not in products_to_update:
+        products_to_update.append(product)
+        
+    # Regenerate descriptions of selected products
+    for product in products_to_update:
+      product.description = generate_sawblade_desc(product.teeth_grade)
+      
     # Return list of updated products
-    pass
+    return products_to_update
   
   def removeProducts(self, amount):
+    # Pick random products to remove
+    products_to_remove = []
+    while len(products_to_remove) < min(amount, len(self.products)):
+      product = random.choice(self.products)
+      if product not in products_to_remove:
+        products_to_remove.append(product)
+        
+    for product in products_to_remove:
+      self.products.remove(product)
+    
     # Return list of product IDs of the removed products
-    pass
+    return products_to_remove
