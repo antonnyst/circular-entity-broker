@@ -65,10 +65,6 @@ def add_product(product_id, product_name, properties):
 
     return response
 
-
-    
-
-
 def delete_product(product_uri):
 
     product_name = "sawblade"
@@ -184,16 +180,53 @@ def sparql_parse(raw_json):
 
     return list_list
 
+# add_company
+# companyId : string
+# properties : [(property,value,type),(property2, value2, type2)]
+# property assumed just name with no prefix
+def add_company(companyId, properties):
+    property_string = ""
+
+    for i in range(0,len(properties)):
+        prop = properties[i]
+        prop_name = "broker:company:" + prop[0]
+        prop_value = prop[1]
+        prop_type = prop[2]
+        property_string += " <{}> \"{}\"^^xsd:{} ".format(prop_name, prop_value, prop_type)
+        if i < len(properties)-1:
+            property_string += ";"
+        else:
+            property_string += "."
+
+    query = """
+        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+        PREFIX broker: <{BROKER_PREFIX}>
+        PREFIX data: <{DATA_PREFIX}>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        INSERT DATA {{
+            data:{companyId} a broker:company ;
+            {property_string} 
+        }}
+    """.format(
+        BROKER_PREFIX=BROKER_PREFIX,
+        DATA_PREFIX=DATA_PREFIX,
+        companyId=companyId,
+        property_string=property_string
+    )
+
+    print(query)
+
+    response = send_sparql_update(query)
+    if not response.ok:
+        print("Error in add_product")
+
+    return response
+
 # Run som tests if this module was ran independently
 if __name__ == "__main__":
-    #print(get_full_property_uri("sawblade","manufacturer"))
-
-    add_product("f1a2","sawblade",
-        [
-            ("name","DetUltimataSågbladet"),
-            ("manufacturer","Weyland-Yutani"),
-            ("teethGrade", "200"),
-            ("teethAmount", "20")
-        ]
-    )
-    print("")
+    add_company("f1d2", [
+        ["name", "Weyland-Yutani", "string"],
+        ["location", "Earth", "string"],
+        ["accessToken", "ffff1111", "string"]
+    ])

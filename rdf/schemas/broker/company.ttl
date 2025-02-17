@@ -19,7 +19,7 @@ broker:company:location a rdf:Property ;
 	rdfs:comment "Location of company headquarters" .
 
 broker:company:accessToken a rdf:Property ;
-	rdfs:domain broker:product ;
+	rdfs:domain broker:company ;
 	rdfs:range xsd:string ;
 	rdfs:label "Product Manufacturer" ;
 	rdfs:comment "The company manufacturing the product" .
