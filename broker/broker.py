@@ -2,6 +2,7 @@ from flask import Flask
 from flask import request
 import requests
 import uuid
+import os
 import db
 
 app = Flask(__name__)
@@ -14,6 +15,12 @@ def main():
 # '9fe2c4e93f654fdbb24c02b15259716c'
 def generate_productId():
     return uuid.uuid4().hex
+
+def generate_companyId():
+    return uuid.uuid4().hex
+
+def generate_accessToken():
+    return os.urandom(64).hex()
 
 
 def validate_valuetype(valueType):
@@ -79,7 +86,7 @@ def product_post():
 
 
 def validateProps(product_name, product_properties):
-    # Get schema properties
+    # Get schema propertiese
     schema_properties = list(map(lambda x: x[0], db.get_properties("http://ceb.ltu.se/components/"+product_name, strip_prefix=True)))
 
     parents = db.get_parent_products("http://ceb.ltu.se/components/"+product_name)
@@ -303,6 +310,27 @@ def components():
         result.append(res[0].split("/")[-1])
 
     return result
+
+# Register a new company and send back access token
+@app.post("/register")
+def company_register():
+    company_name = request.json["name"]
+    
+    companyId = generate_companyId();
+
+    accessToken = generate_accessToken();
+
+    company_properties = [
+        ["name", company_name, "string"],
+        ["accessToken", accessToken, "string"]
+    ] 
+
+    db.add_company(companyId, company_properties);
+
+    return {
+        "companyId": companyId,
+        "accessToken": accessToken
+    }
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
