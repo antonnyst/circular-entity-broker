@@ -24,7 +24,7 @@ class FakeCompany:
     return json.dumps(self, default=lambda o: o.__dict__)
   
   def generateName(self):
-    founder_names = ["Adam", "Anton", "Filip", "Viggo", "Eric"]
+    founder_names = ["Adam", "Anton", "Kebert", "Viggo", "Eric"]
     adjectives = ["Fantastic", "Special", "Amazing", "Interesting", "Useful"]
     company_descriptors = ["Sawblades", "Woodworking Tools", "Machinery", "Solutions"]
     
