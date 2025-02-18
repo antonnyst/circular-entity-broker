@@ -49,12 +49,12 @@ class Sawblade:
     })
     # Sawblade props
     properties.append({
-      "valueType": "string",
+      "valueType": "float",
       "property": "teethGrade",
       "value": self.teeth_grade
     })
     properties.append({
-      "valueType": "string",
+      "valueType": "float",
       "property": "teethAmount",
       "value": self.teeth_amount
     })
