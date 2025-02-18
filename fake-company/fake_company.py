@@ -1,8 +1,6 @@
-from flask import Flask, request, jsonify
-import requests, sys
-from product import Sawblade
+from flask import Flask, request
+import requests
 from company import FakeCompany
-import json
 
 app = Flask(__name__)
 

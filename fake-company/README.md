@@ -6,7 +6,7 @@ GET   /invoke/register - register fake_company with the broker, returns access t
 GET   /invoke/unregister - delete all products and request fake_company to be removed from the broker
 GET   /invoke/create?amount=X - generate X amount of new products (returns copies of the new products as json)
 GET   /invoke/update?amount=X - change the description of X amount of random products
-GET   /invoke/delete?amount=X - delete X amount of random products
+GET   /invoke/remove?amount=X - delete X amount of random products
 GET   /products - get all products currently belonging to fake_company
 ```
 
