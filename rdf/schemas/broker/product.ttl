@@ -18,6 +18,12 @@ broker:product:id a rdf:Property ;
 	rdfs:label "Product Number" ;
 	rdfs:comment "The identifying number/id of the product." .
 
+broker:product:description a rdf:Property ;
+	rdfs:domain broker:product ;
+	rdfs:range xsd:string ;
+	rdfs:label "Product Description" ;
+	rdfs:comment "The description of the product." .
+
 broker:product:manufacturer a rdf:Property ;
 	rdfs:domain broker:product ;
 	rdfs:range xsd:string ;
