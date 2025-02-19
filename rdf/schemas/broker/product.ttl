@@ -4,6 +4,11 @@
 
 @prefix broker: <http://ceb.ltu.se/broker/> .
 
+broker:FluidProperty a rdfs:Class ;
+	rdfs:domain broker:product ;
+	rdfs:label "Fluid property" ;
+	rdfs:comment "An property with a value not stored in the broker" .
+
 broker:product a rdfs:Class .
 
 broker:product:name a rdf:Property ;
@@ -22,4 +27,16 @@ broker:product:manufacturer a rdf:Property ;
 	rdfs:domain broker:product ;
 	rdfs:range xsd:string ;
 	rdfs:label "Product Manufacturer" ;
-	rdfs:comment "The company manufacturing the product" .
+	rdfs:comment "The company manufacturing the product." .
+
+broker:product:price a broker:FluidProperty ;
+	rdfs:domain broker:product ;
+	rdfs:range xsd:float ;
+	rdfs:label "Price" ;
+	rdfs:comment "The price of the product." .
+
+broker:product:stock a broker:FluidProperty ;
+	rdfs:domain broker:product ;
+	rdfs:range xsd:float ;
+	rdfs:label "Stock" ;
+	rdfs:comment "The current stock of the product." .
