@@ -86,7 +86,7 @@ def product_post():
 
 
 def validateProps(product_name, product_properties):
-    # Get schema propertiese
+    # Get schema properties
     schema_properties = list(map(lambda x: x[0], db.get_properties("http://ceb.ltu.se/components/"+product_name, strip_prefix=True)))
 
     parents = db.get_parent_products("http://ceb.ltu.se/components/"+product_name)
