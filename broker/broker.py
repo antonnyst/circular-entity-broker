@@ -180,8 +180,24 @@ def abandon():
 @app.post("/query")
 def query():
     product_name = "sawblade" # Assuming sawblade until API supports specifying product name
+
+    schema_properties = list(
+        map(
+            lambda x: x[0], db.get_properties(
+                "http://ceb.ltu.se/components/"+product_name, strip_prefix=True
+            )
+        )
+    )
+
+    parents = db.get_parent_products("http://ceb.ltu.se/components/"+product_name)
+    for parent in parents:
+        schema_properties.extend(
+            list(map(lambda x: x[0], db.get_properties(parent, strip_prefix=True)))
+        )
+
+    property_count = len(schema_properties);
     
-    limit = request.json["limit"]
+    limit = request.json["limit"] * property_count; # I loooove typecasting
     offset = request.json["offset"]
     propertyQueries = request.json["query"]
 
