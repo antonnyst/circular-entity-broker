@@ -23,9 +23,11 @@
         const products = {{ products|safe }};
         const product = {{ product|tojson }};
         const match = {{match|safe}};
+        const properties = {{ properties|safe }};
+
       
         window.onload = function() {
-          getmatch(products, product, match);
+          getmatch(products, product, match, properties);
         };
       </script>
       
