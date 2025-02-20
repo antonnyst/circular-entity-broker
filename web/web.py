@@ -72,10 +72,10 @@ def get_compare(data):
 def compare():
     url = "http://broker:5000/components"
     products = requests.get(url).text
-
+    properties = session.get('properties')
     product = session.get('product')
     match = session.get('compare')
-    return render_template('match.html',  products=products, product=product, match = match)
+    return render_template('match.html',  products=products, product=product, match = match, properties=properties)
 
 
 if __name__ == '__main__':
