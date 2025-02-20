@@ -37,46 +37,68 @@ function initiateProperties(products, properties, product){
 
 }
 
-function getmatch(products, product, match){
+function getmatch(products, product, match, properties){
     dropdown(products, product);
     var check = 0;
+    var propertiescount = [];
+    var checkprint = false;
+    
     //If the product doesn't exist print "Finns ingen sådan produkt"
     if(match.length == 0){
         head = document.createElement('h1');
-        head.textContent = "Finns ingen sådan produkt";
+        head.textContent = "No product exists";
         document.getElementById('showprops').appendChild(head);
     
     //If the product exist make a table with property and value
     }else{
+        var tbl = document.createElement('table');
+        tbl.id = "showtable";
+        var trprop = document.createElement('tr');
+        //Makes sure that all the columns for properties is getting filled
+        for(var i = 0; i < properties.length; i++){
+            //Prints out the haders
+            if (checkProducts(propertiescount, properties[i].property)){
+                var thprop = document.createElement('th');
+        
+                thprop.textContent = properties[i].property;
+
+                trprop.appendChild(thprop);
+                propertiescount.push(properties);
+            }
+            
+        }
+        tbl.appendChild(trprop);
         match.forEach(obj => {
             if (obj.properties) {
-                var tbl = document.createElement('table');
-                tbl.id = "showtable";
-
-                var trprop = document.createElement('tr');
-                if(check == 0){
-                    obj.properties.forEach(prop => {
-                        var thprop = document.createElement('th');
-    
-                        thprop.textContent = prop.property;
-    
-                        trprop.appendChild(thprop);
-                        
-                    });
-                    tbl.appendChild(trprop);
-                    check++;
-                }
-                
-                
                 var trval = document.createElement('tr');
-                obj.properties.forEach(prop => {
-                    var tdval = document.createElement('td');
 
-                    tdval.textContent = prop.value;
-
-                    trval.appendChild(tdval);
-                    
-                });
+                for(var i = 0; i < properties.length; i++){
+                    checkprint = false;
+                    //loops through all properties of a product
+                    obj.properties.forEach(prop => {
+                        console.log(properties[i].property);
+                        var tdval = document.createElement('td');
+                        //Checks if the product have the property
+                        if(prop.property == properties[i].property){
+                            if(prop.value == ""){
+                                tdval.textContent = "";
+                                checkprint = true;
+                            }else{
+                                tdval.textContent = prop.value;
+                                checkprint = true;
+                            }
+        
+                            trval.appendChild(tdval);
+                        }
+                    });
+                    //If it doesn't have the property we make an empty column
+                    if(checkprint == false){
+                        var tdval = document.createElement('td');
+                        tdval.textContent = "";
+                        trval.appendChild(tdval);
+                    }
+                   
+                }
                 tbl.appendChild(trval);
                 document.getElementById('showprops').appendChild(tbl);
             }
