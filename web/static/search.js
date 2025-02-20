@@ -74,6 +74,7 @@ function getmatch(products, product, match, properties){
 
                 for(var i = 0; i < properties.length; i++){
                     checkprint = false;
+                    
                     //loops through all properties of a product
                     obj.properties.forEach(prop => {
                         console.log(properties[i].property);
