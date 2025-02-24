@@ -135,7 +135,6 @@ function sendProperties(properties){
             valueType.push(properties[i].valueType);
         }
     }
-    console.log(valueType)
     if (Object.keys(inputprops).length === 0) {
         alert('You need to input a value');
         return;
