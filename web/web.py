@@ -34,19 +34,14 @@ def search():
 
     return render_template('properties.html',  products=products, properties=properties, product=product)
 
-def check_float(value):
-    try:
-        float(value)
-        return True
-    except ValueError:
-        return False
-
 @app.route('/resultprop', methods=['POST'])
 def resprop():
     session['compare'] = []
     i = 0
+    product_name = session.get('product')
     #Formatting the json request as specified
     data = {
+            "product_name": product_name,
             "limit": 10,
             "offset": 0,
             "query": []
