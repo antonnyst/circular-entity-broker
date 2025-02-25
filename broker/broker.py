@@ -1,11 +1,10 @@
-from flask import Flask
+from app import app
+
 from flask import request
 import requests
 import uuid
 import os
 import db
-
-app = Flask(__name__)
 
 @app.route("/")
 def main():
@@ -16,11 +15,7 @@ def main():
 def generate_productId():
     return uuid.uuid4().hex
 
-def generate_companyId():
-    return uuid.uuid4().hex
 
-def generate_accessToken():
-    return os.urandom(64).hex()
 
 
 def validate_valuetype(valueType):
@@ -326,27 +321,3 @@ def components():
         result.append(res[0].split("/")[-1])
 
     return result
-
-# Register a new company and send back access token
-@app.post("/register")
-def company_register():
-    company_name = request.json["name"]
-    
-    companyId = generate_companyId();
-
-    accessToken = generate_accessToken();
-
-    company_properties = [
-        ["name", company_name, "string"],
-        ["accessToken", accessToken, "string"]
-    ] 
-
-    db.add_company(companyId, company_properties);
-
-    return {
-        "companyId": companyId,
-        "accessToken": accessToken
-    }
-
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)
