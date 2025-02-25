@@ -248,11 +248,27 @@ def add_company_url(companyId, url):
 
 # Verifies the access token and returns the companyId of the company that the access token belongs to.
 def verify_access_token(accessToken):
+    query = """
+        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+        PREFIX broker: <http://ceb.ltu.se/broker/>
+        PREFIX cmp: <http://ceb.ltu.se/components/>
+        PREFIX data: <http://ceb.ltu.se/data/>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        SELECT * WHERE {{
+            ?company broker:company:accessToken \"{token}\"^^xsd:string .
+        }}
+    """.format(token=accessToken)
 
+    response = send_sparql_query(query)
+    if not response.ok:
+        print("Error in verify access token query")
+        return None
 
+    parsed = sparql_parse(response.text)
+    if len(parsed) == 0:
+        return None
 
-
-    pass
+    return parsed[0][0].split('/')[-1]
 
 
 # Run som tests if this module was ran independently
