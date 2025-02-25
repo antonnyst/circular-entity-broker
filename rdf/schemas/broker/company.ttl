@@ -23,3 +23,9 @@ broker:company:accessToken a rdf:Property ;
 	rdfs:range xsd:string ;
 	rdfs:label "Product Manufacturer" ;
 	rdfs:comment "The company manufacturing the product" .
+
+broker:company:interrogation_url a rdf:Property ;
+	rdfs:domain broker:company ;
+	rdfs:range xsd:string ;
+	rdfs:label "Interrogation URL" ;
+	rdfs:comment "URL for interrogating the company about their products dynamic information" .
