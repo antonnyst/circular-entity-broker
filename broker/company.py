@@ -37,17 +37,29 @@ def company_register():
 
 @app.get("/interrogation")
 def company_interrogation_get():
-    query = """ 
+    access_token = request.headers.get("X-API-CAT")
+
+    query = """
+        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+        PREFIX broker: <http://ceb.ltu.se/broker/>
+        PREFIX cmp: <http://ceb.ltu.se/components/>
+        PREFIX data: <http://ceb.ltu.se/data/>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-        select * where {
-            ?s rdfs:subClassOf <http://ceb.ltu.se/broker/product> .
-            FILTER (?s != <http://ceb.ltu.se/broker/product>)
-        }
-    """
+        SELECT ?url WHERE {{
+            ?company broker:company:accessToken "{token}"^^xsd:string ;
+                broker:company:interrogation_url ?url .
+        }}
+    """.format(token=access_token)
 
+    response = db.send_sparql_query(query)
+    if not response.ok:
+        return [], 500
+    
+    result = db.sparql_parse(response.text)
+    
+    result = list(map(lambda x: x[0], result))
 
-    pass
+    return result
 
 @app.post("/interrogation")
 def company_interrogation_post():
@@ -56,6 +68,9 @@ def company_interrogation_post():
     access_token = request.headers.get("X-API-CAT")
 
     company_id = db.verify_access_token(access_token)
+
+    if company_id is None:
+        return "Error verifying access token", 500
 
     result = db.add_company_url(company_id, url)
 
