@@ -246,6 +246,31 @@ def add_company_url(companyId, url):
 
     return response
 
+def remove_company_url(companyId, url):
+    query = """
+        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+        PREFIX broker: <{BROKER_PREFIX}>
+        PREFIX data: <{DATA_PREFIX}>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        DELETE {{
+            data:{companyId} broker:company:interrogation_url \"{url}\"^^xsd:string
+        }} WHERE {{
+            data:{companyId} broker:company:interrogation_url \"{url}\"^^xsd:string .
+        }}
+    """.format(
+        BROKER_PREFIX=BROKER_PREFIX,
+        DATA_PREFIX=DATA_PREFIX,
+        companyId=companyId,
+        url=url
+    )
+
+    response = send_sparql_update(query)
+    if not response.ok:
+        print("Error in add_company_url")
+
+    return response
+
 # Verifies the access token and returns the companyId of the company that the access token belongs to.
 def verify_access_token(accessToken):
     query = """

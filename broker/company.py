@@ -78,4 +78,18 @@ def company_interrogation_post():
 
 @app.delete("/interrogation")
 def company_interrogation_delete():
-    pass
+    url = request.args.get("url")
+    
+    access_token = request.headers.get("X-API-CAT")
+
+    company_id = db.verify_access_token(access_token)
+
+    if company_id is None:
+        return "Error verifying access token", 500
+
+    result = db.remove_company_url(company_id, url)
+
+    if not result.ok:
+        return "Error", 500
+    
+    return "OK"
