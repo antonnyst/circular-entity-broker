@@ -53,16 +53,13 @@ def company_interrogation_get():
 def company_interrogation_post():
     url = request.json["url"]
     
+    access_token = request.headers.get("X-API-CAT")
 
+    company_id = db.verify_access_token(access_token)
 
+    result = db.add_company_url(company_id, url)
 
-    # TODO add access token verification
-
-
-    db.add_company_url()
-
-
-    pass
+    return "OK"
 
 @app.delete("/interrogation")
 def company_interrogation_delete():
