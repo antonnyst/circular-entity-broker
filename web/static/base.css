@@ -41,6 +41,10 @@ th, td {
     text-align: left;
 }
 
+th{
+    cursor: pointer;
+}
+
 header{
     border: 2px solid black;
 }

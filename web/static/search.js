@@ -37,13 +37,12 @@ function initiateProperties(products, properties, product){
 
 }
 
-function getmatch(products, product, match, properties){
+function getmatch(products, product, match, properties, sortingOrder){
     dropdown(products, product);
-    var check = 0;
     var propertiescount = [];
     var checkprint = false;
     
-    //If the product doesn't exist print "Finns ingen sådan produkt"
+    //If the product doesn't exist print "No product exists"
     if(match.length == 0){
         head = document.createElement('h1');
         head.textContent = "No product exists";
@@ -55,13 +54,13 @@ function getmatch(products, product, match, properties){
         tbl.id = "showtable";
         var trprop = document.createElement('tr');
         //Makes sure that all the columns for properties is getting filled
-        for(var i = 0; i < properties.length; i++){
+        for(let i = 0; i < properties.length; i++){
             //Prints out the haders
             if (checkProducts(propertiescount, properties[i].property)){
                 var thprop = document.createElement('th');
         
                 thprop.textContent = properties[i].property;
-
+                thprop.addEventListener("click", () => sortingResult(products, product, match, properties, properties[i], sortingOrder));
                 trprop.appendChild(thprop);
                 propertiescount.push(properties);
             }
@@ -77,7 +76,6 @@ function getmatch(products, product, match, properties){
                     
                     //loops through all properties of a product
                     obj.properties.forEach(prop => {
-                        console.log(properties[i].property);
                         var tdval = document.createElement('td');
                         //Checks if the product have the property
                         if(prop.property == properties[i].property){
@@ -195,4 +193,43 @@ function dropdown(products, product){
     button.innerHTML = "Get properties";    
     button.addEventListener("click", event => { redirect()});
     document.getElementById('showall').appendChild(button);
+}
+
+function sortingResult(products, product, match, properties, properval, sortingOrder){
+    if(sortingOrder % 2 == 0){
+        //sorting descending
+        const sortedDescending = match.sort((a, b) => {
+            if(properval.valueType == "string"){
+                var propertyA = a.properties.find(props => props.property == properval.property).value;
+                var propertyB = b.properties.find(props => props.property == properval.property).value;
+                return propertyA.localeCompare(propertyB);
+            }else if(properval.valueType == "float"){
+                var propertyA = parseFloat(a.properties.find(props => props.property == properval.property).value);
+                var propertyB = parseFloat(b.properties.find(props => props.property == properval.property).value);
+                return propertyA-propertyB;
+            }
+        
+        });
+        sortingOrder++;
+        document.getElementById('showprops').innerHTML = "";
+        getmatch(products, product, sortedDescending, properties, sortingOrder);
+    }else{
+        //Sorting ascending
+        const sortedAscending = match.sort((a, b) => {
+            if(properval.valueType == "string"){
+                var propertyA = a.properties.find(props => props.property == properval.property).value;
+                var propertyB = b.properties.find(props => props.property == properval.property).value;
+                return propertyB.localeCompare(propertyA);
+            }else if(properval.valueType == "float"){
+                var propertyA = parseFloat(a.properties.find(props => props.property == properval.property).value);
+                var propertyB = parseFloat(b.properties.find(props => props.property == properval.property).value);
+                return propertyB-propertyA;
+            }
+            
+        });
+        sortingOrder++;
+        document.getElementById('showprops').innerHTML = "";
+        getmatch(products, product, sortedAscending, properties, sortingOrder);
+    }
+    
 }
