@@ -80,3 +80,6 @@ h1{
     align-items: center;
     justify-content: center;
 }
+th{
+    cursor: pointer;
+}
