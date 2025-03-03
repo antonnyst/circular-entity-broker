@@ -37,6 +37,51 @@ function initiateProperties(products, properties, product){
 
 }
 
+function genPriceButton(properties, product){
+
+    console.log("test");
+    // Button sending inputs to broker
+    var button = document.createElement("button");
+    button.innerHTML = "Current Price";
+    button.id = "getPrice";
+    button.addEventListener("click", event => {fetchPrice(properties, product)});
+    document.getElementById("showprops").appendChild(button);    
+    }
+
+function fetchPrice(properties){
+
+    console.log("hihihaha");
+    console.log(properties);
+    //Loop through all properties 
+    for(const prop of properties){
+        // Get property price from propertyID 
+       const price = fetch("/interrogate"); 
+       console.log(price);
+        // Display price
+        document.getElementById(value.price.toSting()); //Does JS toString func allow null elements? idk
+    };
+
+
+
+
+
+    console.log(valueType)
+    if (Object.keys(inputprops).length === 0) {
+        alert('You need to input a value');
+        return;
+    }
+    
+    $.ajax({
+        url: '/resultprop',
+        type: 'Post',
+        contentType: 'application/json',
+        data: JSON.stringify({ 'data': inputprops, 'valueType': valueType}),
+        success: function(response) {
+            window.location.href = "/compare";
+        }
+     });   
+}
+
 function getmatch(products, product, match, properties){
     dropdown(products, product);
     var check = 0;
@@ -195,4 +240,5 @@ function dropdown(products, product){
     button.innerHTML = "Get properties";    
     button.addEventListener("click", event => { redirect()});
     document.getElementById('showall').appendChild(button);
+    genPriceButton(products, product);
 }
