@@ -5,37 +5,48 @@
 @prefix broker: <http://ceb.ltu.se/broker/> .
 @prefix data: <http://ceb.ltu.se/data/> .
 
+data:company01 a broker:company ;
+    broker:company:name "Företaget"^^xsd:string ;
+    broker:company:location "Bolagsgatan 1"^^xsd:string ;
+    broker:company:accessToken "af6dgsdhsh"^^xsd:string ;
+    broker:company:interrogation_url "localhost:5000"^^xsd:string .
+
 data:saw01 a cmp:sawblade ;
     broker:product:name "Träsågblad"^^xsd:string ;
     broker:product:id "1001"^^xsd:string ;
     broker:product:manufacturer "Biltema"^^xsd:string ;
     cmp:sawblade:teethGrade "2.0"^^xsd:float ;
-    cmp:sawblade:teethAmount "65"^^xsd:float .
+    cmp:sawblade:teethAmount "65"^^xsd:float ;
+    broker:product:company data:company01 .
 
 data:saw02 a cmp:sawblade ;
     broker:product:name "GrenSågblad"^^xsd:string ;
     broker:product:id "1002"^^xsd:string ;
     broker:product:manufacturer "Biltema"^^xsd:string ;
     cmp:sawblade:teethGrade "2.0"^^xsd:float ;
-    cmp:sawblade:teethAmount "165"^^xsd:float .
+    cmp:sawblade:teethAmount "165"^^xsd:float ;
+    broker:product:company data:company01 .
 
 data:saw03 a cmp:sawblade ;
     broker:product:name "KebertSågblad"^^xsd:string ;
     broker:product:id "1003"^^xsd:string ;
     broker:product:manufacturer "Datasektionen"^^xsd:string ;
     cmp:sawblade:teethGrade "2.0"^^xsd:float ;
-    cmp:sawblade:teethAmount "1065"^^xsd:float .
+    cmp:sawblade:teethAmount "1065"^^xsd:float ;
+    broker:product:company data:company01 .
 
 data:saw04 a cmp:sawblade ;
     broker:product:name "MetalSågblad"^^xsd:string ;
     broker:product:id "1004"^^xsd:string ;
     broker:product:manufacturer "Maskinsektionen"^^xsd:string ;
     cmp:sawblade:teethGrade "1.55"^^xsd:float ;
-    cmp:sawblade:teethAmount "40"^^xsd:float .
+    cmp:sawblade:teethAmount "40"^^xsd:float ;
+    broker:product:company data:company01 .
 
 data:saw05 a cmp:sawblade ;
     broker:product:name "FönsterSågblad"^^xsd:string ;
     broker:product:id "1005"^^xsd:string ;
     broker:product:manufacturer "Biltema"^^xsd:string ;
     cmp:sawblade:teethGrade "0.1"^^xsd:float ;
-    cmp:sawblade:teethAmount "21650"^^xsd:float .
+    cmp:sawblade:teethAmount "21650"^^xsd:float ;
+     broker:product:company data:company01 .

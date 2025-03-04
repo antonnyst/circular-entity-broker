@@ -32,7 +32,8 @@ def invoke_registration():
   
   # Send request to broker
   json = {"name": company.name}
-  response = requests.post(BROKER_URL + "/register", json)
+  headers = {'Accept': 'application/json', "Content-type": "application/json"}    
+  response = requests.post(BROKER_URL + "/register", json=json, headers=headers)
   data = response.json()
   access_token = data["accessToken"]
   company_id = data["companyId"]
