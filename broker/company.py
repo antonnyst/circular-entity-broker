@@ -19,16 +19,16 @@ def generate_accessToken():
 def company_register():
     company_name = request.json["name"]
     
-    companyId = generate_companyId();
+    companyId = generate_companyId()
 
-    accessToken = generate_accessToken();
+    accessToken = generate_accessToken()
 
     company_properties = [
         ["name", company_name, "string"],
         ["accessToken", accessToken, "string"]
     ] 
 
-    db.add_company(companyId, company_properties);
+    db.add_company(companyId, company_properties)
 
     return {
         "companyId": companyId,

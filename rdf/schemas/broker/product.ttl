@@ -35,6 +35,12 @@ broker:product:manufacturer a rdf:Property ;
 	rdfs:label "Product Manufacturer" ;
 	rdfs:comment "The company manufacturing the product." .
 
+broker:product:company a rdf:Property ;
+	rdfs:domain broker:product ;
+	rdfs:range broker:company ;
+	rdfs:label "Product Company" ;
+	rdfs:comment "The company which added the product to the broker." .
+
 broker:product:price a broker:FluidProperty ;
 	rdfs:domain broker:product ;
 	rdfs:range xsd:float ;

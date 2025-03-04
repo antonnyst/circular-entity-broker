@@ -22,9 +22,10 @@ def send_sparql_update(sparql_update):
 # product_id : string
 # product_name: string
 # properties : [(property,value,type),(property2, value2, type2)]
+# company_id : string
 # property assumed just name with no prefix
 # product_name assumed to be in cmp prefix
-def add_product(product_id, product_name, properties): 
+def add_product(product_id, product_name, properties, company_id): 
     property_string = ""
     
     for i in range(0,len(properties)):
@@ -44,10 +45,12 @@ def add_product(product_id, product_name, properties):
         PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
         PREFIX cmp: <{COMPONENT_PREFIX}>
         PREFIX data: <{DATA_PREFIX}>
+        PREFIX broker: <{BROKER_PREFIX}>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         INSERT DATA {{
             data:{product_id} a cmp:{product} ;
+            broker:product:company data:{company_id} ;
             {property_string}
         }}
     """.format(
@@ -55,7 +58,9 @@ def add_product(product_id, product_name, properties):
         product_id=product_id,
         property_string=property_string,
         COMPONENT_PREFIX=COMPONENT_PREFIX,
-        DATA_PREFIX=DATA_PREFIX
+        DATA_PREFIX=DATA_PREFIX,
+        BROKER_PREFIX=BROKER_PREFIX,
+        company_id=company_id,
     )
     
     response = send_sparql_update(query)
@@ -103,6 +108,35 @@ def get_properties(product_uri, strip_prefix=False):
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         select ?property ?type where {{
             ?property rdf:type rdf:Property ;
+                      rdfs:domain <{product}> .
+                      
+            ?property rdfs:range ?type .
+        }}
+    """.format(product = product_uri)
+
+    #print(query)
+
+    response = send_sparql_query(query)
+
+    # Convert list of lists to just a list
+    properties = sparql_parse(response.text)
+    
+    # Remove the prefixes
+    if strip_prefix:
+        properties = list(map(lambda x: [x[0].split(":")[-1], x[1].split("#")[-1]], properties))
+    
+    return properties
+
+# Retrieves an products FLUID properties based upon its full uri
+# Returns (propertyName, valueType)
+def get_fluid_properties(product_uri, strip_prefix=False):
+    query = """ 
+        PREFIX broker: <http://ceb.ltu.se/broker/>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+        select ?property ?type where {{
+            ?property rdf:type broker:FluidProperty ;
                       rdfs:domain <{product}> .
                       
             ?property rdfs:range ?type .
@@ -267,9 +301,29 @@ def remove_company_url(companyId, url):
 
     response = send_sparql_update(query)
     if not response.ok:
-        print("Error in add_company_url")
+        print("Error in remove_company_url")
 
     return response
+
+def get_company_urls(companyId):
+    query = """
+        PREFIX broker: <http://ceb.ltu.se/broker/>
+        PREFIX data: <http://ceb.ltu.se/data/>
+        SELECT * WHERE {{
+            data:{companyId} broker:company:interrogation_url ?url .
+        }}
+    """.format(companyId=companyId)
+    
+    response = send_sparql_query(query)
+    if not response.ok:
+        print("Error in get_company_urls")
+        return None
+
+    parsed = list(map(lambda x: x[0],sparql_parse(response.text)))
+    if len(parsed) == 0:
+        return None
+
+    return parsed
 
 # Verifies the access token and returns the companyId of the company that the access token belongs to.
 def verify_access_token(accessToken):
@@ -295,6 +349,46 @@ def verify_access_token(accessToken):
 
     return parsed[0][0].split('/')[-1]
 
+def get_types_from_product_id(product_id):
+    query = """
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        PREFIX data: <http://ceb.ltu.se/data/>
+        SELECT ?type WHERE {{
+            data:{product_id} rdf:type ?type .
+        }}
+    """.format(product_id=product_id)
+
+    response = send_sparql_query(query)
+    if not response.ok:
+        print("Error in get_types_from_product_id")
+        return None
+
+    parsed = list(map(lambda x: x[0], sparql_parse(response.text)))
+    if len(parsed) == 0:
+        return None
+
+    return parsed
+
+def get_company_from_product_id(product_id):
+    query = """ 
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        PREFIX data: <http://ceb.ltu.se/data/>
+        PREFIX broker: <http://ceb.ltu.se/broker/>
+        SELECT ?company WHERE {{
+            data:{product_id} broker:product:company ?company .
+        }}
+    """.format(product_id=product_id)
+
+    response = send_sparql_query(query)
+    if not response.ok:
+        print("Error in get_company_from_product_id")
+        return None
+
+    parsed = sparql_parse(response.text)
+    if len(parsed) == 0:
+        return None
+
+    return parsed[0][0].split('/')[-1]
 
 # Run som tests if this module was ran independently
 if __name__ == "__main__":

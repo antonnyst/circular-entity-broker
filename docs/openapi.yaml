@@ -180,6 +180,8 @@ paths:
     post:
       tags:
         - ProductQuerying
+      security:
+      - CompanyAccessToken: []
       requestBody:
         content:
           application/json:

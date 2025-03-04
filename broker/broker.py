@@ -48,6 +48,11 @@ def validate_value(value, valueType):
 # https://www.w3.org/TR/2013/REC-sparql11-update-20130321/
 @app.post("/product")
 def product_post():    
+    access_token = request.headers.get("X-API-CAT")
+    company_id = db.verify_access_token(access_token)
+    if company_id is None:
+        return "Error verifying access token", 500
+
     product_name = "sawblade" # Assuming sawblade until API supports specifying product name
     
     # Convert to (uri, value)
@@ -65,7 +70,7 @@ def product_post():
     productId = generate_productId()
 
     # Send query to db
-    result = db.add_product(productId, product_name, product_properties)
+    result = db.add_product(productId, product_name, product_properties, company_id)
     
     if not result.ok:
         return {
@@ -321,3 +326,69 @@ def components():
         result.append(res[0].split("/")[-1])
 
     return result
+
+@app.get("/interrogate")
+def interrogate():
+    productId = request.args.get('productId')
+    prop = request.args.get('property')
+
+    # Get product name from id
+    types = db.get_types_from_product_id(productId)
+
+    # Validate that property is an fluid property
+    schema_fluid_properties = []
+    
+    for t in types:
+        schema_fluid_properties.extend(db.get_fluid_properties(t,strip_prefix=True))
+
+    #[
+    # [
+    #   "price",
+    #   "float"
+    # ],
+    # [
+    #   "stock",
+    #   "float"
+    # ]
+    #]
+
+    valid = False
+    for schema_prop in schema_fluid_properties:
+        if prop == schema_prop[0]:
+            valid = True
+            break
+    
+    if not valid:
+        return "Invalid properties", 500
+
+    # Get company id from product
+    companyId = db.get_company_from_product_id(productId)
+
+    # Get addresses for interrogation
+    urls = db.get_company_urls(companyId)
+    if urls == None or len(urls) == 0:
+        return "Company does not support interrogation", 500
+    
+    # Interrogate until property is found
+    value = None
+    debug_string = ""
+    for url in urls:
+        headers = {'Accept': 'application/json', "content-type": "application/x-www-form-urlencoded"}
+        data = []
+        data.append(productId)
+        response = requests.post("http://"+url+"/api/fluid_data", json=data, headers=headers)
+        debug_string += response.text
+        if response.ok:
+            json = response.json()[0]
+            for p in json["properties"]:
+                if p.property == prop:
+                    value = p
+                    break
+            if value != None:
+                break
+
+    if value == None:
+        return debug_string, 404
+    
+    # Return this shit
+    return value
