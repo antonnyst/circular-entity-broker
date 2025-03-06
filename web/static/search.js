@@ -53,6 +53,7 @@ function fetchPrice(properties){
     console.log("hihihaha");
     console.log(properties);
     //Loop through all properties 
+<<<<<<< Updated upstream
     for(const prop of properties){
         // Get property price from propertyID 
        const price = fetch("/interrogate"); 
@@ -63,6 +64,24 @@ function fetchPrice(properties){
 
 
 
+=======
+    for(const prop of properties){ 
+       const price = fetch("/components/schemas/PropertyValue") // Get property price from propertyID
+    }
+    // Display price
+    document.getElementById(value.price.toSting()); //Does JS toString func allow null elements? idk
+
+
+
+    // var inputprops = {};
+    // var valueType = [];
+    // for(var i = 0; i < properties.length; i++){
+    //     if(document.getElementById(properties[i]).value != ''){
+    //         inputprops[properties[i].property] = document.getElementById(properties[i].property).value;
+    //         valueType.push(properties[i].valueType);
+    //     }
+    // }
+>>>>>>> Stashed changes
 
 
     console.log(valueType)
