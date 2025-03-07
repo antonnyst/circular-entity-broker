@@ -179,7 +179,7 @@ def abandon():
 
 @app.post("/query")
 def query():
-    product_name = "sawblade" # Assuming sawblade until API supports specifying product name
+    product_name = request.json["product_name"]
 
     schema_properties = list(
         map(

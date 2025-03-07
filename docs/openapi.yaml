@@ -73,6 +73,9 @@ components:
       required:
         - query
       properties:
+        product_name:
+          type: string
+          example: sawblade
         limit:
           type: integer
           example: 100
