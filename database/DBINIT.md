@@ -6,7 +6,7 @@
 ## Open web browser of your choice and go to Graphdb (firefox recommended)
 Enter: `localhost:7200`
 
-![Localhost:7200](../docs/images/Mon%20Mar%20%203%2004:39:54%20PM%20CET%202025.png)
+![Localhost:7200](../docs/images/image2.png)
 
 
 Here Click on `Import` and then `Create new repository` next to the plus sign. 
