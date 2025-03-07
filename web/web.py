@@ -45,8 +45,10 @@ def check_float(value):
 def resprop():
     session['compare'] = []
     i = 0
+    product_name = session.get('product')
     #Formatting the json request as specified
     data = {
+            "product_name": product_name,
             "limit": 10,
             "offset": 0,
             "query": []
