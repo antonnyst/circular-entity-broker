@@ -1,9 +1,11 @@
 from flask import Flask, request
 import requests
 from company import FakeCompany
+from flask_cors import CORS
+ 
 
 app = Flask(__name__)
-
+CORS(app)  # Enable CORS globally
 # TEMP: Hard-coded config values
 BROKER_URL = "http://localhost:7100"
 company = FakeCompany()
@@ -130,7 +132,7 @@ def fluid_data():
   if pid != "":
     # Find product and return its fluid data
     for product in company.products:
-      if product.product_id == pid:
+      if product.id == pid:
         return product.generate_fluid_data()
       
     return "No product found with requested PID", 400

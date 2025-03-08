@@ -1,6 +1,6 @@
 function initiate(products){
     //Calls for dropdown which makes the dropdown bar
-    var product = "select your choice";
+    let product = "select your choice";
     dropdown(products, product);
     h1 = document.createElement('h1');
     h1.innerHTML = "Choose your product from the dropdown bar";
@@ -10,16 +10,16 @@ function initiate(products){
 function initiateProperties(products, properties, product){
     dropdown(products, product);
     //Creating labels and input fields for properties
-    for(var i = 0; i < properties.length; i++){
-        var container = document.createElement('div');
+    for(let i = 0; i < properties.length; i++){
+        let container = document.createElement('div');
         container.className = "disp";
 
-        var label = document.createElement('label');
+        let label = document.createElement('label');
         label.className = "dropdown";
         label.innerHTML = properties[i].property;   
         label.id = i; 
 
-        var input = document.createElement("input");
+        let input = document.createElement("input");
         input.className = "dropdown-text";
         input.type = "text";
         input.id = properties[i].property;
@@ -29,7 +29,7 @@ function initiateProperties(products, properties, product){
 
     }
     //Button sending inputs to broker
-    var button = document.createElement('button');
+    let button = document.createElement('button');
     button.innerHTML = "Search";    
     button.id = "search"
     button.addEventListener("click", event => { sendProperties(properties, product)});
@@ -37,76 +37,48 @@ function initiateProperties(products, properties, product){
 
 }
 
-function genPriceButton(properties, product){
-
-    console.log("test");
+function genPriceButton(products, product, match, properties){
     // Button sending inputs to broker
-    var button = document.createElement("button");
+    let button = document.createElement("button");
     button.innerHTML = "Current Price";
     button.id = "getPrice";
-    button.addEventListener("click", event => {fetchPrice(properties, product)});
+    button.addEventListener("click", event => {fetchPrice(products, product, match, properties)});
     document.getElementById("showprops").appendChild(button);    
     }
 
-function fetchPrice(properties){
-
-    console.log("hihihaha");
-    console.log(properties);
-    //Loop through all properties 
-<<<<<<< Updated upstream
-    for(const prop of properties){
-        // Get property price from propertyID 
-       const price = fetch("/interrogate"); 
-       console.log(price);
-        // Display price
-        document.getElementById(value.price.toSting()); //Does JS toString func allow null elements? idk
-    };
-
-
-
-=======
-    for(const prop of properties){ 
-       const price = fetch("/components/schemas/PropertyValue") // Get property price from propertyID
-    }
-    // Display price
-    document.getElementById(value.price.toSting()); //Does JS toString func allow null elements? idk
-
-
-
-    // var inputprops = {};
-    // var valueType = [];
-    // for(var i = 0; i < properties.length; i++){
-    //     if(document.getElementById(properties[i]).value != ''){
-    //         inputprops[properties[i].property] = document.getElementById(properties[i].property).value;
-    //         valueType.push(properties[i].valueType);
-    //     }
-    // }
->>>>>>> Stashed changes
-
-
-    console.log(valueType)
-    if (Object.keys(inputprops).length === 0) {
-        alert('You need to input a value');
-        return;
-    }
+async function fetchPrice(products, product, match, properties){
+    // First we wanted to work with arrays but for some reason JS created Array-like objects that are relly wonky so we
+    // changed for this approch instead
+    let priceArr = { values: [] };
+    let stockArr = { values: [] };
+    // Get all products
+   await fetch("http://127.0.0.1:5000/products")
+    .then(response => response.json()) 
+    .then(data => { 
+        // Loop through all products to get every products price and stock
+        data.forEach(item => { 
+            fetch(`http://127.0.0.1:5000/api/fluid_data?pid=${item.id}`)
+            .then(res => res.json())
+            .then(data1 => {
+                //Asign the products price to priceArr object and stock to stockArr object
+                priceArr.values.push(data1.price);
+                stockArr.values.push(data1.stock);
+        })
+        });
+    });
     
-    $.ajax({
-        url: '/resultprop',
-        type: 'Post',
-        contentType: 'application/json',
-        data: JSON.stringify({ 'data': inputprops, 'valueType': valueType}),
-        success: function(response) {
-            window.location.href = "/compare";
-        }
-     });   
+    
+    getmatch(products, product, match, properties, priceArr, stockArr)
+
 }
 
-function getmatch(products, product, match, properties){
+function getmatch(products, product, match, properties, price, stock){
+    document.getElementById('showall').innerHTML = ""
     dropdown(products, product);
-    var check = 0;
-    var propertiescount = [];
-    var checkprint = false;
-    
+    let check = 0;
+    let propertiescount = [];
+    let checkprint = false;
+    genPriceButton(products, product, match, properties);
     //If the product doesn't exist print "Finns ingen sådan produkt"
     if(match.length == 0){
         head = document.createElement('h1');
@@ -115,14 +87,14 @@ function getmatch(products, product, match, properties){
     
     //If the product exist make a table with property and value
     }else{
-        var tbl = document.createElement('table');
+        let tbl = document.createElement('table');
         tbl.id = "showtable";
-        var trprop = document.createElement('tr');
+        let trprop = document.createElement('tr');
         //Makes sure that all the columns for properties is getting filled
-        for(var i = 0; i < properties.length; i++){
+        for(let i = 0; i < properties.length; i++){
             //Prints out the haders
             if (checkProducts(propertiescount, properties[i].property)){
-                var thprop = document.createElement('th');
+                let thprop = document.createElement('th');
         
                 thprop.textContent = properties[i].property;
 
@@ -134,15 +106,14 @@ function getmatch(products, product, match, properties){
         tbl.appendChild(trprop);
         match.forEach(obj => {
             if (obj.properties) {
-                var trval = document.createElement('tr');
-
-                for(var i = 0; i < properties.length; i++){
-                    checkprint = false;
-                    
+                let trval = document.createElement('tr');
+                
+                for(let i = 0; i < properties.length; i++){
+                   
+                   
                     //loops through all properties of a product
                     obj.properties.forEach(prop => {
-                        console.log(properties[i].property);
-                        var tdval = document.createElement('td');
+                        let tdval = document.createElement('td');
                         //Checks if the product have the property
                         if(prop.property == properties[i].property){
                             if(prop.value == ""){
@@ -152,18 +123,41 @@ function getmatch(products, product, match, properties){
                                 tdval.textContent = prop.value;
                                 checkprint = true;
                             }
-        
                             trval.appendChild(tdval);
+
+        
                         }
                     });
+                    
+
                     //If it doesn't have the property we make an empty column
                     if(checkprint == false){
-                        var tdval = document.createElement('td');
+                        let tdval = document.createElement('td');
                         tdval.textContent = "";
                         trval.appendChild(tdval);
                     }
-                   
                 }
+                if(typeof(value) != "undefined" || typeof(stock) != "undefined"){
+                    //console.log(price);
+                    //console.log(stock);
+                    if (Array.isArray(price.values)) {
+                        price.values.forEach(value => console.log("WE bing chillin"));
+                      } else {
+                        console.log("price.values is not an array");
+                      }
+                    console.log("Is Javascript just a borken language?")  
+                    let tdval = document.createElement('td');
+                    price.values.forEach(value => console.log("We bing chillin"));
+                    console.log("Why does aobe command not execute???");
+
+                //tdval.textContent = price[i];
+                //trval.appendChild(tdval);
+                //tdval.textContent = stock[i];
+                //trval.appendChild(tdval);
+                
+            }
+
+
                 tbl.appendChild(trval);
                 document.getElementById('showprops').appendChild(tbl);
             }
@@ -191,9 +185,9 @@ function redirect(){
 
 //Sends value for all properties to resultprop with POST request
 function sendProperties(properties){
-    var inputprops = {};
-    var valueType = [];
-    for(var i = 0; i < properties.length; i++){
+    let inputprops = {};
+    let valueType = [];
+    for(let i = 0; i < properties.length; i++){
         if(document.getElementById(properties[i].property).value != ''){
             inputprops[properties[i].property] = document.getElementById(properties[i].property).value;
             valueType.push(properties[i].valueType);
@@ -231,18 +225,18 @@ function checkProducts(count, value){
 
 //Creates the dropdown bar for all pages
 function dropdown(products, product){
-    var count = [];
+    let count = [];
     document.getElementById('showall').innerHTML = ""
-    var selectList = document.createElement("select");
+    let selectList = document.createElement("select");
     selectList.id = "dropId";
 
-    var option = document.createElement("option");
+    let option = document.createElement("option");
     text = document.createTextNode(product);
     option.appendChild(text);
     selectList.appendChild(option);
     count.push(product)
 
-    for(var j = 0; j < products.length; j++){
+    for(let j = 0; j < products.length; j++){
         //Checks if button already exists, so we don't create several
         if(checkProducts(count, products[j])){
             option = document.createElement( 'option' );
@@ -255,9 +249,9 @@ function dropdown(products, product){
     } 
     document.getElementById("showall").appendChild(selectList)  
     //Button for searching and going back
-    var button = document.createElement('button');
+    let button = document.createElement('button');
     button.innerHTML = "Get properties";    
     button.addEventListener("click", event => { redirect()});
     document.getElementById('showall').appendChild(button);
-    genPriceButton(products, product);
+    
 }
