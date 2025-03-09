@@ -141,6 +141,30 @@ function redirect(){
      });   
 }
 
+function redirectSearchBar(selectElementSearch, products){
+    let compMatch = false;
+    products.forEach(prod =>{
+        if(selectElementSearch != "" && selectElementSearch == prod){
+            compMatch = true;
+            $.ajax({
+                url: '/resultprod',
+                type: 'GET',
+                data: { product: selectElementSearch},
+                success: function(response) {
+                    window.location.href = "/search";
+                }, error: function() {
+                    // On failure, show an alert
+                    alert('Choose a product');
+                }
+            });   
+        }
+    });
+    if(compMatch == false){
+        alert("no such product");
+    }
+    
+}
+
 
 //Sends value for all properties to resultprop with POST request
 function sendProperties(properties){
@@ -206,12 +230,19 @@ function dropdown(products, product){
             count.push(products[j])
         }
     } 
+    let searchbar = document.createElement('input');
+    let buttonSearch = document.createElement('button');
+    buttonSearch.id = "searchRes";
+    buttonSearch.innerHTML = "search for product";
     document.getElementById("showall").appendChild(selectList)  
     //Button for searching and going back
     var button = document.createElement('button');
     button.innerHTML = "Get properties";    
     button.addEventListener("click", event => { redirect()});
+    buttonSearch.addEventListener("click", event => { redirectSearchBar(searchbar.value, products)});
     document.getElementById('showall').appendChild(button);
+    document.getElementById('showall').appendChild(searchbar);
+    document.getElementById('showall').appendChild(buttonSearch);
 }
 
 function sortingResult(products, product, match, properties, properval, sortingOrder){
