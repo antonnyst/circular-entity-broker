@@ -143,13 +143,14 @@ function redirect(){
 
 function redirectSearchBar(selectElementSearch, products){
     let compMatch = false;
+    let goodValue = selectElementSearch.toLowerCase(); // Fixes case sensisitivity
     products.forEach(prod =>{
-        if(selectElementSearch != "" && selectElementSearch == prod){
+        if(selectElementSearch != "" && goodValue == prod){
             compMatch = true;
             $.ajax({
                 url: '/resultprod',
                 type: 'GET',
-                data: { product: selectElementSearch},
+                data: { product: goodValue},
                 success: function(response) {
                     window.location.href = "/search";
                 }, error: function() {
