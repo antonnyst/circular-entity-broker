@@ -1,5 +1,15 @@
+# Fakecompanies 
+Fake-companies is used as testing data so we can test how the broker works without the need of existing companies. 
+
+
 # How to use
 
+## Start fakecompanies 
+Don't forget to start GraphDB!
+```
+$ cd circular-entity-broker/fake-company/
+$ flask --app fake_company run
+```
 ## API Endpoints (for internal control only, not meant to be a public API):
 ```
 GET   /invoke/register - register fake_company with the broker, returns access token
