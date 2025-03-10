@@ -53,9 +53,9 @@ async function fetchPrice(products, product, match, properties, sortingOrder, ch
     let stockArr = { values: [] };
     let fluid = [];
     // Get all products
-    console.log(match[0].properties[1].value);
-    //const response = await fetch(`http://localhost:7100/interrogate?productId=${match[0].properties[1].value}&property=price`);
-    const response = await fetch("http://127.0.0.1:5000/products");
+    console.log(match);
+    const response = await fetch(`http://localhost:7100/interrogate?productId=${match[0].productId}&property=price`);
+    //const response = await fetch("http://127.0.0.1:5000/products");
     console.log(response);
     const data = await response.json();
     const values = data.map(async (item) => {
@@ -133,14 +133,14 @@ function getmatch(products, product, match, properties, sortingOrder, choosenHea
         tbl.appendChild(trprop);
         match.forEach(obj => {
             if (obj.properties) {
-                var trval = document.createElement('tr');
-
-                for(var i = 0; i < properties.length; i++){
-                    checkprint = false;
-                    
+                let trval = document.createElement('tr');
+                
+                for(let i = 0; i < properties.length; i++){
+                   
+                   
                     //loops through all properties of a product
                     obj.properties.forEach(prop => {
-                        var tdval = document.createElement('td');
+                        let tdval = document.createElement('td');
                         //Checks if the product have the property
                         if(prop.property == properties[i].property){
                             if(prop.value == ""){
@@ -150,58 +150,65 @@ function getmatch(products, product, match, properties, sortingOrder, choosenHea
                                 tdval.textContent = prop.value;
                                 checkprint = true;
                             }
-        
                             trval.appendChild(tdval);
+
+        
                         }
                     });
+                    
+
                     //If it doesn't have the property we make an empty column
                     if(checkprint == false){
-                        var tdval = document.createElement('td');
+                        let tdval = document.createElement('td');
                         tdval.textContent = "";
                         trval.appendChild(tdval);
                     }
-                   
                 }
-                tbl.appendChild(trval);
+                
+                if(typeof(price) != "undefined" || typeof(stock) != "undefined"){
+                    let count = 0;
+                    let tdPrice = document.createElement('td');
+                    let tdStock = document.createElement('td');
+                    if (Array.isArray(price.values)) {
+                        price.values.forEach(value => {
+                            tdPrice.textContent = value;
+                            console.log(value)
+                            
+                        });
+                        price.values.pop();
+
+                      } else {
+                        console.log("price.values is not an array");
+                      }
+                      if (Array.isArray(stock.values)) {
+                        stock.values.forEach(stock_value => {
+                            tdStock.textContent = stock_value;
+                            
+                        });
+                        stock.values.pop();
+
+                      } else {
+                        console.log("stock.values is not an array");
+                      }
+                      
+                    
+                    console.log("Why does aobe command not execute???");
+
+                //tdval.textContent = price[i];
+                //trval.appendChild(tdval);
+                //tdval.textContent = stock[i];
+                //trval.appendChild(tdval);
+                trval.appendChild(tdPrice);
+                trval.appendChild(tdStock);
+            }
+            tbl.appendChild(trval);
+
+               
+                
                 document.getElementById('showprops').appendChild(tbl);
             }
         });
-        if(typeof(price) != "undefined" || typeof(stock) != "undefined"){
-            let count = 0;
-            let tdPrice = document.createElement('td');
-            let tdStock = document.createElement('td');
-            if (Array.isArray(price.values)) {
-                price.values.forEach(value => {
-                    tdPrice.textContent = value;
-                    console.log(value)
-                    
-                });
-                price.values.pop();
 
-              } else {
-                console.log("price.values is not an array");
-              }
-              if (Array.isArray(stock.values)) {
-                stock.values.forEach(stock_value => {
-                    tdStock.textContent = stock_value;
-                    
-                });
-                stock.values.pop();
-
-              } else {
-                console.log("stock.values is not an array");
-              }
-              
-            
-            console.log("Why does aobe command not execute???");
-
-        //tdval.textContent = price[i];
-        //trval.appendChild(tdval);
-        //tdval.textContent = stock[i];
-        //trval.appendChild(tdval);
-        trval.appendChild(tdPrice);
-        trval.appendChild(tdStock);
-    }
 
     }
 }
