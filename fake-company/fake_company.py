@@ -126,14 +126,18 @@ def all_products():
 # Serve fluid data to the broker
 @app.route("/api/fluid_data")
 def fluid_data():
-  # Get product id from path param "pid"
-  pid = request.args.get("pid", "")
-  if pid != "":
+  fluid_data = []
+  # Get product ids from body
+  pids = request.get_json()
+
+  if type(pids) is list:
     # Find product and return its fluid data
-    for product in company.products:
-      if product.product_id == pid:
-        return product.generate_fluid_data()
+    for id in pids:
+      for product in company.products:
+        if product.product_id == id:
+          fluid_data.append(product.generate_fluid_data())
+      return "ID '" + id + "' does not match any products", 400
       
-    return "No product found with requested PID", 400
+    return fluid_data
   else:
-    return "Invalid PID", 400
+    return "Invalid PID array", 400
