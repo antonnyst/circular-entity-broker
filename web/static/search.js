@@ -37,12 +37,12 @@ function initiateProperties(products, properties, product){
 
 }
 
-function genPriceButton(products, product, match, properties){
+function genPriceButton(products, product, match, properties, sortingOrder, choosenHeader){
     // Button sending inputs to broker
     let button = document.createElement("button");
     button.innerHTML = "Current Price";
     button.id = "getPrice";
-    button.addEventListener("click", event => {fetchPrice(products, product, match, properties)});
+    button.addEventListener("click", event => {fetchPrice(products, product, match, properties, sortingOrder, choosenHeader)});
     document.getElementById("showprops").appendChild(button);    
     }
 
@@ -53,31 +53,31 @@ async function fetchPrice(products, product, match, properties, sortingOrder, ch
     let stockArr = { values: [] };
     let fluid = [];
     // Get all products
-    console.log(match);
-    const response = await fetch(`http://localhost:7100/interrogate?productId=${match[0].productId}&property=price`);
-    //const response = await fetch("http://127.0.0.1:5000/products");
-    console.log(response);
-    const data = await response.json();
-    const values = data.map(async (item) => {
-        const urlFetch = await fetch(`http://127.0.0.1:5000/api/fluid_data?pid=${item.id}`);
-        const fluidData = await urlFetch.json();
-        // Add price and stock to their respective arrays
-        const keys = Object.keys(fluidData); 
-        priceArr.values.push(fluidData.price);
-        stockArr.values.push(fluidData.stock);
-        fluid.push(keys);
+    const values = match.map(async (item) => {
+        const priceresponse = await fetch(`http://localhost:7100/interrogate?productId=${item.productId}&property=price`);
+        const stockresponse = await fetch(`http://localhost:7100/interrogate?productId=${item.productId}&property=stock`);
+        const priceValue = await priceresponse.json();
+
+        const stockValue = await stockresponse.json();
+        priceArr.values.push(priceValue.value);
+        stockArr.values.push(stockValue.value);
+        fluid.push(priceValue.property);
+        fluid.push(stockValue.property);
     });
 
     // Wait for all fetch calls to complete
     await Promise.all(values);
-    getmatch(products, product, match, properties, sortingOrder, choosenHeader, priceArr, stockArr, fluid[0])
+    getmatch(products, product, match, properties, sortingOrder, choosenHeader, priceArr, stockArr, fluid)
 
 }
 
 function getmatch(products, product, match, properties, sortingOrder, choosenHeader, price, stock, fluid){
     dropdown(products, product);
     var propertiescount = [];
+    let thFluid = [];
     var checkprint = false;
+    console.log(sortingOrder);
+    document.getElementById('showprops').innerHTML = "";
     genPriceButton(products, product, match, properties, sortingOrder, choosenHeader);
     //If the product doesn't exist print "No product exists"
     if(match.length == 0){
@@ -124,15 +124,19 @@ function getmatch(products, product, match, properties, sortingOrder, choosenHea
         }
         if(typeof(fluid) != "undefined"){
             fluid.forEach(fluidCat => {
-                let thprop = document.createElement('th');
-                thprop.textContent = fluidCat;
-                trprop.appendChild(thprop);
+                if(checkProducts(thFluid, fluidCat)){
+                    let thprop = document.createElement('th');
+                    thprop.textContent = fluidCat;
+                    trprop.appendChild(thprop);
+                    thFluid.push(fluidCat)
+                }
             })
         }
 
         tbl.appendChild(trprop);
         match.forEach(obj => {
             if (obj.properties) {
+                
                 let trval = document.createElement('tr');
                 
                 for(let i = 0; i < properties.length; i++){
@@ -140,6 +144,9 @@ function getmatch(products, product, match, properties, sortingOrder, choosenHea
                    
                     //loops through all properties of a product
                     obj.properties.forEach(prop => {
+                        if(prop.property == "id"){
+                            prop.value = obj.productId;
+                        }
                         let tdval = document.createElement('td');
                         //Checks if the product have the property
                         if(prop.property == properties[i].property){
@@ -166,14 +173,12 @@ function getmatch(products, product, match, properties, sortingOrder, choosenHea
                 }
                 
                 if(typeof(price) != "undefined" || typeof(stock) != "undefined"){
-                    let count = 0;
+
                     let tdPrice = document.createElement('td');
                     let tdStock = document.createElement('td');
                     if (Array.isArray(price.values)) {
                         price.values.forEach(value => {
                             tdPrice.textContent = value;
-                            console.log(value)
-                            
                         });
                         price.values.pop();
 
@@ -190,22 +195,11 @@ function getmatch(products, product, match, properties, sortingOrder, choosenHea
                       } else {
                         console.log("stock.values is not an array");
                       }
-                      
-                    
-                    console.log("Why does aobe command not execute???");
-
-                //tdval.textContent = price[i];
-                //trval.appendChild(tdval);
-                //tdval.textContent = stock[i];
-                //trval.appendChild(tdval);
                 trval.appendChild(tdPrice);
                 trval.appendChild(tdStock);
             }
             tbl.appendChild(trval);
-
-               
-                
-                document.getElementById('showprops').appendChild(tbl);
+            document.getElementById('showprops').appendChild(tbl);
             }
         });
 
