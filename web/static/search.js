@@ -37,11 +37,45 @@ function initiateProperties(products, properties, product){
 
 }
 
-function getmatch(products, product, match, properties, sortingOrder, choosenHeader){
+function genPriceButton(products, product, match, properties){
+    // Button sending inputs to broker
+    let button = document.createElement("button");
+    button.innerHTML = "Current Price";
+    button.id = "getPrice";
+    button.addEventListener("click", event => {fetchPrice(products, product, match, properties)});
+    document.getElementById("showprops").appendChild(button);    
+    }
+
+async function fetchPrice(products, product, match, properties, sortingOrder, choosenHeader){
+    // First we wanted to work with arrays but for some reason JS created Array-like objects that are relly wonky so we
+    // changed for this approch instead
+    let priceArr = { values: [] };
+    let stockArr = { values: [] };
+    let fluid = [];
+    // Get all products
+    const response = await fetch("http://127.0.0.1:5000/products");
+    const data = await response.json();
+    const values = data.map(async (item) => {
+        const urlFetch = await fetch(`http://127.0.0.1:5000/api/fluid_data?pid=${item.id}`);
+        const fluidData = await urlFetch.json();
+        // Add price and stock to their respective arrays
+        const keys = Object.keys(fluidData); 
+        priceArr.values.push(fluidData.price);
+        stockArr.values.push(fluidData.stock);
+        fluid.push(keys);
+    });
+
+    // Wait for all fetch calls to complete
+    await Promise.all(values);
+    getmatch(products, product, match, properties, priceArr, stockArr, fluid[0])
+
+}
+
+function getmatch(products, product, match, properties, sortingOrder, choosenHeader, price, stock, fluid){
     dropdown(products, product);
     var propertiescount = [];
     var checkprint = false;
-    
+    genPriceButton(products, product, match, properties, sortingOrder, choosenHeader);
     //If the product doesn't exist print "No product exists"
     if(match.length == 0){
         head = document.createElement('h1');
@@ -54,7 +88,7 @@ function getmatch(products, product, match, properties, sortingOrder, choosenHea
         tbl.id = "showtable";
         var trprop = document.createElement('tr');
         //Makes sure that all the columns for properties is getting filled
-        for(let i = 0; i < properties.length; i++){
+        for(let i = 0; i < properties.length - 1; i++){
             //Prints out the haders
             if (checkProducts(propertiescount, properties[i].property)){
                 if(choosenHeader == properties[i].property){
@@ -85,6 +119,14 @@ function getmatch(products, product, match, properties, sortingOrder, choosenHea
             }
             
         }
+        if(typeof(fluid) != "undefined"){
+            fluid.forEach(fluidCat => {
+                let thprop = document.createElement('th');
+                thprop.textContent = fluidCat;
+                trprop.appendChild(thprop);
+            })
+        }
+
         tbl.appendChild(trprop);
         match.forEach(obj => {
             if (obj.properties) {
@@ -121,6 +163,43 @@ function getmatch(products, product, match, properties, sortingOrder, choosenHea
                 document.getElementById('showprops').appendChild(tbl);
             }
         });
+        if(typeof(price) != "undefined" || typeof(stock) != "undefined"){
+            let count = 0;
+            let tdPrice = document.createElement('td');
+            let tdStock = document.createElement('td');
+            if (Array.isArray(price.values)) {
+                price.values.forEach(value => {
+                    tdPrice.textContent = value;
+                    console.log(value)
+                    
+                });
+                price.values.pop();
+
+              } else {
+                console.log("price.values is not an array");
+              }
+              if (Array.isArray(stock.values)) {
+                stock.values.forEach(stock_value => {
+                    tdStock.textContent = stock_value;
+                    
+                });
+                stock.values.pop();
+
+              } else {
+                console.log("stock.values is not an array");
+              }
+              
+            
+            console.log("Why does aobe command not execute???");
+
+        //tdval.textContent = price[i];
+        //trval.appendChild(tdval);
+        //tdval.textContent = stock[i];
+        //trval.appendChild(tdval);
+        trval.appendChild(tdPrice);
+        trval.appendChild(tdStock);
+    }
+
     }
 }
 
