@@ -373,7 +373,7 @@ def interrogate():
     value = None
     debug_string = ""
     for url in urls:
-        headers = {'Accept': 'application/json', "content-type": "application/x-www-form-urlencoded"}
+        headers = {'Accept': 'application/json', "content-type": "application/json"}
         data = []
         data.append(productId)
         response = requests.post("http://"+url+"/api/fluid_data", json=data, headers=headers)
@@ -381,7 +381,7 @@ def interrogate():
         if response.ok:
             json = response.json()[0]
             for p in json["properties"]:
-                if p.property == prop:
+                if p["property"] == prop:
                     value = p
                     break
             if value != None:

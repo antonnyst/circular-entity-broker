@@ -313,12 +313,6 @@ paths:
       security:
         - CompanyAccessToken: []
       description: Delete the company and all related data
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              $ref: "#/components/schemas/CompanyAccessToken"
       responses:
         "200":
           description: OK
