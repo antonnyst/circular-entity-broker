@@ -5,6 +5,9 @@ import requests
 import uuid
 import os
 import db
+from flask_cors import CORS
+
+CORS(app)
 
 @app.route("/")
 def main():

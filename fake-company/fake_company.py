@@ -1,9 +1,10 @@
 from flask import Flask, request
 import requests, random
 from company import FakeCompany
+from flask_cors import CORS
 
 app = Flask(__name__)
-
+CORS(app)
 # TEMP: Hard-coded config values
 BROKER_URL = "http://localhost:7100"
 company = FakeCompany()

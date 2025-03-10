@@ -53,7 +53,10 @@ async function fetchPrice(products, product, match, properties, sortingOrder, ch
     let stockArr = { values: [] };
     let fluid = [];
     // Get all products
+    console.log(match[0].properties[1].value);
+    //const response = await fetch(`http://localhost:7100/interrogate?productId=${match[0].properties[1].value}&property=price`);
     const response = await fetch("http://127.0.0.1:5000/products");
+    console.log(response);
     const data = await response.json();
     const values = data.map(async (item) => {
         const urlFetch = await fetch(`http://127.0.0.1:5000/api/fluid_data?pid=${item.id}`);
@@ -67,7 +70,7 @@ async function fetchPrice(products, product, match, properties, sortingOrder, ch
 
     // Wait for all fetch calls to complete
     await Promise.all(values);
-    getmatch(products, product, match, properties, priceArr, stockArr, fluid[0])
+    getmatch(products, product, match, properties, sortingOrder, choosenHeader, priceArr, stockArr, fluid[0])
 
 }
 
@@ -88,7 +91,7 @@ function getmatch(products, product, match, properties, sortingOrder, choosenHea
         tbl.id = "showtable";
         var trprop = document.createElement('tr');
         //Makes sure that all the columns for properties is getting filled
-        for(let i = 0; i < properties.length - 1; i++){
+        for(let i = 0; i < properties.length; i++){
             //Prints out the haders
             if (checkProducts(propertiescount, properties[i].property)){
                 if(choosenHeader == properties[i].property){
