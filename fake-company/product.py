@@ -70,10 +70,21 @@ class Sawblade:
     if random.randint(1, 4) == 1:
       self.stock = random.randint(0, self.max_stock)
     
-    return {
-      "price": self.price,
-      "stock": self.stock,
-    }
+    properties = []
+    
+    # General props
+    properties.append({
+      "valueType": "float",
+      "property": "price",
+      "value": self.price
+    })
+    properties.append({
+      "valueType": "float",
+      "property": "stock",
+      "value": self.stock
+    })
+
+    return properties
 
 
 product_gen_sawblade = {
