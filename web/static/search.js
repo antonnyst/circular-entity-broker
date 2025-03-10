@@ -51,29 +51,29 @@ async function fetchPrice(products, product, match, properties){
     // changed for this approch instead
     let priceArr = { values: [] };
     let stockArr = { values: [] };
+    let fluid = [];
     // Get all products
-   await fetch("http://127.0.0.1:5000/products")
-    .then(response => response.json()) 
-    .then(data => { 
-        // Loop through all products to get every products price and stock
-        data.forEach(item => { 
-            fetch(`http://127.0.0.1:5000/api/fluid_data?pid=${item.id}`)
-            .then(res => res.json())
-            .then(data1 => {
-                //Asign the products price to priceArr object and stock to stockArr object
-                priceArr.values.push(data1.price);
-                stockArr.values.push(data1.stock);
-        })
-        });
+    //When in broker this should be http://broker:5000/components
+    const response = await fetch("http://127.0.0.1:5000/products");
+    const data = await response.json();
+    const values = data.map(async (item) => {
+        const urlFetch = await fetch(`http://127.0.0.1:5000/api/fluid_data?pid=${item.id}`);
+        const fluidData = await urlFetch.json();
+        // Add price and stock to their respective arrays
+        const keys = Object.keys(fluidData); 
+        priceArr.values.push(fluidData.price);
+        stockArr.values.push(fluidData.stock);
+        fluid.push(keys);
     });
-    
-    
-    getmatch(products, product, match, properties, priceArr, stockArr)
+
+    // Wait for all fetch calls to complete
+    await Promise.all(values);
+    getmatch(products, product, match, properties, priceArr, stockArr, fluid[0])
 
 }
 
-function getmatch(products, product, match, properties, price, stock){
-    document.getElementById('showall').innerHTML = ""
+function getmatch(products, product, match, properties, price, stock, fluid){
+    document.getElementById('showprops').innerHTML = "";
     dropdown(products, product);
     let check = 0;
     let propertiescount = [];
@@ -92,7 +92,7 @@ function getmatch(products, product, match, properties, price, stock){
         let trprop = document.createElement('tr');
         //Makes sure that all the columns for properties is getting filled
         for(let i = 0; i < properties.length; i++){
-            //Prints out the haders
+            //Prints out the headers
             if (checkProducts(propertiescount, properties[i].property)){
                 let thprop = document.createElement('th');
         
@@ -103,6 +103,14 @@ function getmatch(products, product, match, properties, price, stock){
             }
             
         }
+        if(typeof(fluid) != "undefined"){
+            fluid.forEach(fluidCat => {
+                let thprop = document.createElement('th');
+                thprop.textContent = fluidCat;
+                trprop.appendChild(thprop);
+            })
+        }
+       
         tbl.appendChild(trprop);
         match.forEach(obj => {
             if (obj.properties) {
@@ -137,28 +145,36 @@ function getmatch(products, product, match, properties, price, stock){
                         trval.appendChild(tdval);
                     }
                 }
-                if(typeof(value) != "undefined" || typeof(stock) != "undefined"){
-                    //console.log(price);
-                    //console.log(stock);
+                
+                if(typeof(price) != "undefined" || typeof(stock) != "undefined"){
+                    let count = 0;
+                    let thdyn = document.createElement('th');
+                    let tdFluid = document.createElement('td');
                     if (Array.isArray(price.values)) {
-                        price.values.forEach(value => console.log("WE bing chillin"));
+                        price.values.forEach(value => {
+                            tdFluid.textContent = value;
+                            console.log(value)
+                            
+                        });
+                        price.values.pop();
+
                       } else {
                         console.log("price.values is not an array");
                       }
-                    console.log("Is Javascript just a borken language?")  
-                    let tdval = document.createElement('td');
-                    price.values.forEach(value => console.log("We bing chillin"));
+                      
+                    
                     console.log("Why does aobe command not execute???");
 
                 //tdval.textContent = price[i];
                 //trval.appendChild(tdval);
                 //tdval.textContent = stock[i];
                 //trval.appendChild(tdval);
-                
+                trval.appendChild(tdFluid);
             }
+            tbl.appendChild(trval);
 
-
-                tbl.appendChild(trval);
+               
+                
                 document.getElementById('showprops').appendChild(tbl);
             }
         });
