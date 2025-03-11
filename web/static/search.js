@@ -74,7 +74,6 @@ async function fetchPrice(products, product, match, properties, sortingOrder, ch
 async function getFluidData(product) {
     const FluidData = await fetch(`http://localhost:7100/fluid_properties?product=${product}`);
     const retFluidData = await FluidData.json();
-    console.log(retFluidData);
     return retFluidData;
 }
 
@@ -129,17 +128,16 @@ function getmatch(products, product, match, properties, sortingOrder, choosenHea
             }
             
         }
-        const thFluidData = getFluidData(product);
-        console.log(thFluidData);
-        thFluidData.forEach(fluidCat => {
-            if(checkProducts(thFluid, fluidCat)){
+        getFluidData(product).then(thFluidData => {
+            thFluidData.forEach(fluid => {
                 let thprop = document.createElement('th');
-                thprop.textContent = fluidCat;
+                thprop.textContent = fluid.property;
                 trprop.appendChild(thprop);
-                thFluid.push(fluidCat)
-            }
-        })
+            })
+            
+        });
 
+        
         tbl.appendChild(trprop);
         match.forEach(obj => {
             if (obj.properties) {
