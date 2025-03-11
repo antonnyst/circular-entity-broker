@@ -71,12 +71,19 @@ async function fetchPrice(products, product, match, properties, sortingOrder, ch
 
 }
 
-function getmatch(products, product, match, properties, sortingOrder, choosenHeader, price, stock, fluid){
+async function getFluidData(product) {
+    const FluidData = await fetch(`http://localhost:7100/fluid_properties?product=${product}`);
+    const retFluidData = await FluidData.json();
+    console.log(retFluidData);
+    return retFluidData;
+}
+
+function getmatch(products, product, match, properties, sortingOrder, choosenHeader, price, stock){
     dropdown(products, product);
     var propertiescount = [];
     let thFluid = [];
     var checkprint = false;
-    console.log(sortingOrder);
+    
     document.getElementById('showprops').innerHTML = "";
     genPriceButton(products, product, match, properties, sortingOrder, choosenHeader);
     //If the product doesn't exist print "No product exists"
@@ -93,7 +100,7 @@ function getmatch(products, product, match, properties, sortingOrder, choosenHea
         //Makes sure that all the columns for properties is getting filled
         for(let i = 0; i < properties.length; i++){
             //Prints out the haders
-            if (checkProducts(propertiescount, properties[i].property)){
+            if (checkProducts(propertiescount, properties[i].property) && properties[i].property != "company"){
                 if(choosenHeader == properties[i].property){
                     if(sortingOrder % 2 == 0){
                         var thprop = document.createElement('th');
@@ -122,16 +129,16 @@ function getmatch(products, product, match, properties, sortingOrder, choosenHea
             }
             
         }
-        if(typeof(fluid) != "undefined"){
-            fluid.forEach(fluidCat => {
-                if(checkProducts(thFluid, fluidCat)){
-                    let thprop = document.createElement('th');
-                    thprop.textContent = fluidCat;
-                    trprop.appendChild(thprop);
-                    thFluid.push(fluidCat)
-                }
-            })
-        }
+        const thFluidData = getFluidData(product);
+        console.log(thFluidData);
+        thFluidData.forEach(fluidCat => {
+            if(checkProducts(thFluid, fluidCat)){
+                let thprop = document.createElement('th');
+                thprop.textContent = fluidCat;
+                trprop.appendChild(thprop);
+                thFluid.push(fluidCat)
+            }
+        })
 
         tbl.appendChild(trprop);
         match.forEach(obj => {
@@ -144,12 +151,13 @@ function getmatch(products, product, match, properties, sortingOrder, choosenHea
                    
                     //loops through all properties of a product
                     obj.properties.forEach(prop => {
-                        if(prop.property == "id"){
-                            prop.value = obj.productId;
-                        }
+                        
                         let tdval = document.createElement('td');
                         //Checks if the product have the property
-                        if(prop.property == properties[i].property){
+                        if(prop.property == "company"){
+                            checkprint = true;
+                        }
+                        if(prop.property == properties[i].property && prop.property != "company"){
                             if(prop.value == ""){
                                 tdval.textContent = "";
                                 checkprint = true;
