@@ -46,11 +46,12 @@ components:
       properties:
         queryType:
           type: string
-          description: How to compare this property when performing the query
+          description: How to compare this property when performing the query. `like` will only work for string queries and is *cASe senSiTive*
           enum:
             - min
             - max
             - exact
+            - like
           example: "exact"
         valueType:
           type: string
