@@ -57,7 +57,8 @@ def resprop():
     properties = request.get_json()["data"]
     valueType = request.get_json()["valueType"]
     for key, value in properties.items():
-            data["query"].append({"queryType": "exact", "valueType" : valueType[i], "property": key, "value": value})
+            queryType = valueType[i] == "string" and "like" or "exact"
+            data["query"].append({"queryType": queryType, "valueType" : valueType[i], "property": key, "value": value})
             i += 1
     session['compare'] = get_compare(data)
 

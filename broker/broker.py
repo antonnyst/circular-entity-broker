@@ -229,6 +229,31 @@ def query():
                     value=query["value"],
                     type=query["valueType"]
                 )
+
+            # For string searches
+            case "like":
+                prop = db.get_full_property_uri(product_name, query["property"])
+                if prop == None:
+                    return {
+                        "code": 500,
+                        "message": "Invalid property"
+                    }
+                if query["valueType"] != "string" or not validate_value(query["value"], query["valueType"]):
+                    return {
+                        "code": 500,
+                        "message": "Invalid value/valueType"
+                    }
+
+                selection_string += """
+                    ?product <{prop}> ?like{propName} .
+                    filter contains(?like{propName}, \"{value}\")
+                """.format(
+                    prop=prop,
+                    propName=query["property"],
+                    value=query["value"],
+                    type=query["valueType"]
+                )
+            
             case _:
                 return {
                     "code": 500,
