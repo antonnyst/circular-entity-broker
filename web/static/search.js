@@ -37,26 +37,119 @@ function initiateProperties(products, properties, product){
 
 }
 
-function getmatch(products, product, match, properties, sortingOrder, choosenHeader){
+function gen_fluid_button(property, product_id, parent, text_id) {
+    let button = document.createElement("button");
+    button.innerHTML = "Get " + property;
+    button.id = "get"+property;
+    button.addEventListener("click", async event => {
+        let value = await get_fluid_data(product_id, property)
+        let text = document.getElementById(text_id)
+        text.textContent = value;
+        text.classList.remove("text-hidden");
+        button.classList.add("button-hidden");
+        fluid_data_dict[property+product_id] = value;
+    });
+    parent.appendChild(button);    
+}
+
+function genStockButton(products, product, match, properties, sortingOrder, choosenHeader){
+    // Button sending inputs to broker
+    let button = document.createElement("button");
+    button.innerHTML = "Current Stock";
+    button.id = "getStock";
+    button.addEventListener("click", event => {fetchStock(products, product, match, properties, sortingOrder, choosenHeader)});
+    document.getElementById("showprops").appendChild(button);    
+    }
+
+async function fetchStock(products, product, match, properties, sortingOrder, choosenHeader){
+    // First we wanted to work with arrays but for some reason JS created Array-like objects that are relly wonky so we
+    // changed for this approch instead
+    let stockArr = { values: [] };
+    let fluid = [];
+    // Get all products
+    const values = match.map(async (item) => {
+        
+        const stockresponse = await fetch(`http://localhost:7100/interrogate?productId=${item.productId}&property=stock`);
+        
+
+        const stockValue = await stockresponse.json();
+       
+        stockArr.values.push(stockValue.value);
+       
+        fluid.push(stockValue.property);
+    });
+
+    // Wait for all fetch calls to complete
+    await Promise.all(values);
+    getmatch(products, product, match, properties, sortingOrder, choosenHeader, [], stockArr)
+
+}
+
+function genPriceButton(products, product, match, properties, sortingOrder, choosenHeader){
+    // Button sending inputs to broker
+    let button = document.createElement("button");
+    button.innerHTML = "Current Price $";
+    button.id = "getPrice";
+    button.addEventListener("click", event => {fetchPrice(products, product, match, properties, sortingOrder, choosenHeader)});
+    document.getElementById("showprops").appendChild(button);    
+    }
+
+async function fetchPrice(products, product, match, properties, sortingOrder, choosenHeader){
+    // First we wanted to work with arrays but for some reason JS created Array-like objects that are relly wonky so we
+    // changed for this approch instead
+    let priceArr = { values: [] };
+    
+    let fluid = [];
+    // Get all products
+    const values = match.map(async (item) => {
+        const priceresponse = await fetch(`http://localhost:7100/interrogate?productId=${item.productId}&property=price`);
+        const priceValue = await priceresponse.json();
+        priceArr.values.push(priceValue.value);
+        fluid.push(priceValue.property);
+    });
+
+    // Wait for all fetch calls to complete
+    await Promise.all(values);
+    getmatch(products, product, match, properties, sortingOrder, choosenHeader, priceArr, [])
+
+}
+
+async function getFluidData(product) {
+    const FluidData = await fetch(`http://localhost:7100/fluid_properties?product=${product}`);
+    const retFluidData = await FluidData.json();
+    return retFluidData;
+}
+
+let fluid_data;
+let fluid_data_dict = {}
+
+async function getmatch(products, product, match, properties, sortingOrder, choosenHeader){
     dropdown(products, product);
     var propertiescount = [];
+    let thFluid = [];
     var checkprint = false;
-    
+    document.getElementById('showprops').innerHTML = "";
+    //genStockButton(products, product, match, properties, sortingOrder, choosenHeader);
+    //genPriceButton(products, product, match, properties, sortingOrder, choosenHeader);
     //If the product doesn't exist print "No product exists"
-    if(match.length == 0){
+    if (match.length == 0) {
         head = document.createElement('h1');
         head.textContent = "No product exists";
         document.getElementById('showprops').appendChild(head);
     
     //If the product exist make a table with property and value
-    }else{
+    } else {
+
+        let fluid_data = await getFluidData(product);
+        console.log(fluid_data);
+
         var tbl = document.createElement('table');
         tbl.id = "showtable";
         var trprop = document.createElement('tr');
         //Makes sure that all the columns for properties is getting filled
         for(let i = 0; i < properties.length; i++){
             //Prints out the haders
-            if (checkProducts(propertiescount, properties[i].property)){
+            if (checkProducts(propertiescount, properties[i].property) && properties[i].property != "company"){
                 if(choosenHeader == properties[i].property){
                     if(sortingOrder % 2 == 0){
                         var thprop = document.createElement('th');
@@ -85,19 +178,30 @@ function getmatch(products, product, match, properties, sortingOrder, choosenHea
             }
             
         }
+        fluid_data.forEach(fluid => {
+            let thprop = document.createElement('th');
+            thprop.textContent = fluid.property;
+            trprop.appendChild(thprop);
+        });
+
+        
         tbl.appendChild(trprop);
         match.forEach(obj => {
             if (obj.properties) {
-                var trval = document.createElement('tr');
-
-                for(var i = 0; i < properties.length; i++){
-                    checkprint = false;
-                    
+                let trval = document.createElement('tr');
+                
+                for(let i = 0; i < properties.length; i++){
+                
+                
                     //loops through all properties of a product
                     obj.properties.forEach(prop => {
-                        var tdval = document.createElement('td');
+                        
+                        let tdval = document.createElement('td');
                         //Checks if the product have the property
-                        if(prop.property == properties[i].property){
+                        if(prop.property == "company"){
+                            checkprint = true;
+                        }
+                        if(prop.property == properties[i].property && prop.property != "company"){
                             if(prop.value == ""){
                                 tdval.textContent = "";
                                 checkprint = true;
@@ -105,22 +209,44 @@ function getmatch(products, product, match, properties, sortingOrder, choosenHea
                                 tdval.textContent = prop.value;
                                 checkprint = true;
                             }
-        
                             trval.appendChild(tdval);
+
+        
                         }
                     });
+                    
+
                     //If it doesn't have the property we make an empty column
                     if(checkprint == false){
-                        var tdval = document.createElement('td');
+                        let tdval = document.createElement('td');
                         tdval.textContent = "";
                         trval.appendChild(tdval);
                     }
-                   
                 }
+
+                fluid_data.forEach(fluidData => {
+                    let tdval = document.createElement('td');
+                    let text_id = "p"+fluidData["property"]+obj["productId"];
+
+                    let text = document.createElement('p');
+                    text.className = "text-hidden"
+                    text.id = text_id
+                   
+
+                    if (fluid_data_dict[fluidData["property"]+obj["productId"]] !== undefined) {
+                        text.textContent = fluid_data_dict[fluidData["property"]+obj["productId"]];
+                        text.classList.remove("text-hidden");
+                    } else {
+                        gen_fluid_button(fluidData["property"], obj["productId"], tdval, text_id);
+                    }
+                    tdval.appendChild(text);           
+                    trval.appendChild(tdval);
+                });
+                
                 tbl.appendChild(trval);
-                document.getElementById('showprops').appendChild(tbl);
             }
         });
+        document.getElementById('showprops').appendChild(tbl);
     }
 }
 
@@ -283,4 +409,11 @@ function sortingResult(products, product, match, properties, properval, sortingO
         getmatch(products, product, sortedAscending, properties, sortingOrder, properval.property);
     }
     
+}
+
+async function get_fluid_data(product_id, property) {
+    const priceresponse = await fetch(`http://localhost:7100/interrogate?productId=${product_id}&property=${property}`);
+    const priceValue = await priceresponse.json();
+        
+    return priceValue["value"]
 }

@@ -3,7 +3,6 @@ import requests, random
 from company import FakeCompany
 
 app = Flask(__name__)
-
 # TEMP: Hard-coded config values
 BROKER_URL = "http://localhost:7100"
 company = FakeCompany()

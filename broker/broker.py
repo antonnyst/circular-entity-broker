@@ -5,6 +5,9 @@ import requests
 import uuid
 import os
 import db
+from flask_cors import CORS
+
+CORS(app)
 
 @app.route("/")
 def main():
@@ -349,6 +352,29 @@ def components():
     
     for res in response:
         result.append(res[0].split("/")[-1])
+
+    return result
+
+# Returns all component(product types) names in database
+@app.get("/fluid_properties")
+def fluid_properties():
+    product_name = request.args.get('product')
+
+    props = db.get_fluid_properties("http://ceb.ltu.se/components/"+product_name, strip_prefix=True)
+
+    parents = db.get_parent_products("http://ceb.ltu.se/components/"+product_name)
+    for parent in parents:
+        props.extend(db.get_fluid_properties(parent, strip_prefix=True))
+
+    result = []
+
+    for prop in props:
+        result.append(
+            {
+                "property": prop[0],
+                "valueType": prop[1]
+            }
+        )
 
     return result
 

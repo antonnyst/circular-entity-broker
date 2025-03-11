@@ -83,3 +83,9 @@ h1{
 th{
     cursor: pointer;
 }
+.text-hidden {
+    display: none
+}
+.button-hidden {
+    display: none
+}
