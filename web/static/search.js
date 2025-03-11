@@ -52,67 +52,7 @@ function gen_fluid_button(property, product_id, parent, text_id) {
     parent.appendChild(button);    
 }
 
-function genStockButton(products, product, match, properties, sortingOrder, choosenHeader){
-    // Button sending inputs to broker
-    let button = document.createElement("button");
-    button.innerHTML = "Current Stock";
-    button.id = "getStock";
-    button.addEventListener("click", event => {fetchStock(products, product, match, properties, sortingOrder, choosenHeader)});
-    document.getElementById("showprops").appendChild(button);    
-    }
 
-async function fetchStock(products, product, match, properties, sortingOrder, choosenHeader){
-    // First we wanted to work with arrays but for some reason JS created Array-like objects that are relly wonky so we
-    // changed for this approch instead
-    let stockArr = { values: [] };
-    let fluid = [];
-    // Get all products
-    const values = match.map(async (item) => {
-        
-        const stockresponse = await fetch(`http://localhost:7100/interrogate?productId=${item.productId}&property=stock`);
-        
-
-        const stockValue = await stockresponse.json();
-       
-        stockArr.values.push(stockValue.value);
-       
-        fluid.push(stockValue.property);
-    });
-
-    // Wait for all fetch calls to complete
-    await Promise.all(values);
-    getmatch(products, product, match, properties, sortingOrder, choosenHeader, [], stockArr)
-
-}
-
-function genPriceButton(products, product, match, properties, sortingOrder, choosenHeader){
-    // Button sending inputs to broker
-    let button = document.createElement("button");
-    button.innerHTML = "Current Price $";
-    button.id = "getPrice";
-    button.addEventListener("click", event => {fetchPrice(products, product, match, properties, sortingOrder, choosenHeader)});
-    document.getElementById("showprops").appendChild(button);    
-    }
-
-async function fetchPrice(products, product, match, properties, sortingOrder, choosenHeader){
-    // First we wanted to work with arrays but for some reason JS created Array-like objects that are relly wonky so we
-    // changed for this approch instead
-    let priceArr = { values: [] };
-    
-    let fluid = [];
-    // Get all products
-    const values = match.map(async (item) => {
-        const priceresponse = await fetch(`http://localhost:7100/interrogate?productId=${item.productId}&property=price`);
-        const priceValue = await priceresponse.json();
-        priceArr.values.push(priceValue.value);
-        fluid.push(priceValue.property);
-    });
-
-    // Wait for all fetch calls to complete
-    await Promise.all(values);
-    getmatch(products, product, match, properties, sortingOrder, choosenHeader, priceArr, [])
-
-}
 
 async function getFluidData(product) {
     const FluidData = await fetch(`http://localhost:7100/fluid_properties?product=${product}`);

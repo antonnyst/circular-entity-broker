@@ -8,7 +8,8 @@ Fake-companies is used as testing data so we can test how the broker works witho
 Don't forget to start GraphDB!
 ```
 $ cd circular-entity-broker/fake-company/
-$ flask --app fake_company run
+$ python fake_company.py
+$ curl //130.240.155.26:XXXX/invoke/setup  # The XXXX are randomly genrerated number between 5000 and 5999
 ```
 ## API Endpoints (for internal control only, not meant to be a public API):
 ```
