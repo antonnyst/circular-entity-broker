@@ -37,10 +37,43 @@ function initiateProperties(products, properties, product){
 
 }
 
+function genStockButton(products, product, match, properties, sortingOrder, choosenHeader){
+    // Button sending inputs to broker
+    let button = document.createElement("button");
+    button.innerHTML = "Current Stock";
+    button.id = "getStock";
+    button.addEventListener("click", event => {fetchStock(products, product, match, properties, sortingOrder, choosenHeader)});
+    document.getElementById("showprops").appendChild(button);    
+    }
+
+async function fetchStock(products, product, match, properties, sortingOrder, choosenHeader){
+    // First we wanted to work with arrays but for some reason JS created Array-like objects that are relly wonky so we
+    // changed for this approch instead
+    let stockArr = { values: [] };
+    let fluid = [];
+    // Get all products
+    const values = match.map(async (item) => {
+        
+        const stockresponse = await fetch(`http://localhost:7100/interrogate?productId=${item.productId}&property=stock`);
+        
+
+        const stockValue = await stockresponse.json();
+       
+        stockArr.values.push(stockValue.value);
+       
+        fluid.push(stockValue.property);
+    });
+
+    // Wait for all fetch calls to complete
+    await Promise.all(values);
+    getmatch(products, product, match, properties, sortingOrder, choosenHeader, [], stockArr)
+
+}
+
 function genPriceButton(products, product, match, properties, sortingOrder, choosenHeader){
     // Button sending inputs to broker
     let button = document.createElement("button");
-    button.innerHTML = "Current Price";
+    button.innerHTML = "Current Price $";
     button.id = "getPrice";
     button.addEventListener("click", event => {fetchPrice(products, product, match, properties, sortingOrder, choosenHeader)});
     document.getElementById("showprops").appendChild(button);    
@@ -50,24 +83,19 @@ async function fetchPrice(products, product, match, properties, sortingOrder, ch
     // First we wanted to work with arrays but for some reason JS created Array-like objects that are relly wonky so we
     // changed for this approch instead
     let priceArr = { values: [] };
-    let stockArr = { values: [] };
+    
     let fluid = [];
     // Get all products
     const values = match.map(async (item) => {
         const priceresponse = await fetch(`http://localhost:7100/interrogate?productId=${item.productId}&property=price`);
-        const stockresponse = await fetch(`http://localhost:7100/interrogate?productId=${item.productId}&property=stock`);
         const priceValue = await priceresponse.json();
-
-        const stockValue = await stockresponse.json();
         priceArr.values.push(priceValue.value);
-        stockArr.values.push(stockValue.value);
         fluid.push(priceValue.property);
-        fluid.push(stockValue.property);
     });
 
     // Wait for all fetch calls to complete
     await Promise.all(values);
-    getmatch(products, product, match, properties, sortingOrder, choosenHeader, priceArr, stockArr, fluid)
+    getmatch(products, product, match, properties, sortingOrder, choosenHeader, priceArr, [])
 
 }
 
@@ -82,8 +110,8 @@ function getmatch(products, product, match, properties, sortingOrder, choosenHea
     var propertiescount = [];
     let thFluid = [];
     var checkprint = false;
-    
     document.getElementById('showprops').innerHTML = "";
+    genStockButton(products, product, match, properties, sortingOrder, choosenHeader);
     genPriceButton(products, product, match, properties, sortingOrder, choosenHeader);
     //If the product doesn't exist print "No product exists"
     if(match.length == 0){
@@ -178,32 +206,38 @@ function getmatch(products, product, match, properties, sortingOrder, choosenHea
                     }
                 }
                 
-                if(typeof(price) != "undefined" || typeof(stock) != "undefined"){
-
+                if(typeof(price) != "undefined"){
                     let tdPrice = document.createElement('td');
-                    let tdStock = document.createElement('td');
                     if (Array.isArray(price.values)) {
-                        price.values.forEach(value => {
+                        
+                            price.values.forEach(value => {
                             tdPrice.textContent = value;
-                        });
-                        price.values.pop();
 
-                      } else {
-                        console.log("price.values is not an array");
-                      }
-                      if (Array.isArray(stock.values)) {
-                        stock.values.forEach(stock_value => {
-                            tdStock.textContent = stock_value;
-                            
                         });
-                        stock.values.pop();
-
+                            price.values.pop();
+                     
                       } else {
-                        console.log("stock.values is not an array");
+                        console.log("price.values is not an array or empty");
                       }
                 trval.appendChild(tdPrice);
-                trval.appendChild(tdStock);
             }
+
+            if(typeof(stock) != "undefined"){
+                let tdStock = document.createElement('td');
+                
+                  if (Array.isArray(stock.values)) {
+                    
+                        stock.values.forEach(stock_value => {
+                        tdStock.textContent = stock_value;
+                    });
+                    stock.values.pop();
+                  
+                  } else {
+                    console.log("stock.values is not an array or empty");
+                  }
+
+            trval.appendChild(tdStock);
+        }
             tbl.appendChild(trval);
             document.getElementById('showprops').appendChild(tbl);
             }
